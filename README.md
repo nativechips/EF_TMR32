@@ -32,9 +32,9 @@ EF_TMR32_APB INST (
 The following table is the result for implmenting the EF_TMR32 IP using Sky130 PDK and the [OpenLane2](https://github.com/efabless/openlane2) flow tool. You can find the configuration file used [here]()
 |Module | Number of cells | Max. freq |
 |---|---|---|
-|EF_TMR32|||
-|EF_TMR32_APB|||
-|EF_TMR32_AHBL|||
+|EF_TMR32|911||
+|EF_TMR32_APB|1571||
+|EF_TMR32_AHBL|1607||
 |EF_TMR32_WB|||
 ## The Programming Interface
 
