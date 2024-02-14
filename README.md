@@ -174,7 +174,7 @@ The following are the bit definitions for the interrupt registers:
 |2|MY|1|TMR matches CMPY register.|
 
 ### The Interface 
-
+<img src="docs/EF_TMR32.svg" width="600"/>
 
 #### Module Parameters 
 
