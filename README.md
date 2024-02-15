@@ -210,6 +210,20 @@ The following are the bit definitions for the interrupt registers:
 |matchy_flag|output|1|Flag raised when matching compare value x|
 |timeout_flag|output|1|Flag raised when timeout happen|
 ## F/W Usage Guidelines:
+* To use the timer only:
+ 1. Set the value of reload (the maximum value the timer counter will reach if up counting or the value it will start from when down counting) by writing to ``RELOAD`` register
+ 2. Set the timer counting frequency by writing to the ``PR`` register where  the timer counting frequency is $Clock\ freq/(PR + 1)$|
+ 4. Choose whether you want the timer counter to be up counting, down counting, up/down counting by setting the ``DIR`` field in ``CFG`` register
+ 5. Choose whether you want the timer counter to be periodic (starts counting again after reaching reload value) or one shot (count only one time and stays at reload value) by setting the ``P`` field in ``CFG`` register
+ 6. Enable the timer by setting ``TE`` field in ``CTRL`` register , if one shot mode is used, use ``TS`` field to restart the counter
+ 7. Get the actual timer value through reading ``TMR`` register
+    
+* To generate pwm signals:
+1. Do the exact same steps (from 1 to 5)  for using the timer 
+2. Set the values for the two compare registers, if needed, by writing to ``CMPX`` and ``CMPY`` registers
+3. Choose the actions you want when the timer reaches each of zero, cmpx (up counting), cmpy (up counting), reload, cmpx (down counting), cmpy (down counting). The actions could be either no action, high, low, or invert. You can set the actions by writing to ``PWM0CFG`` if using pwm0 or ``PWM1CFG`` if using pwm1.
+4. Enable the timer, and enable pwm0 and/or pwm1 by writting to ``CTRL`` register
+       
 ## Installation:
 You can either clone repo or use [IPM](https://github.com/efabless/IPM) which is an open-source IPs Package Manager
 * To clone repo:
