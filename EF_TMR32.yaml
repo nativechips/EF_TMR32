@@ -18,7 +18,7 @@ A 32-bit timer and PWM generator with the following features:
 - Fault handeling.
 
   "
-  repo: https://github.com/efabless/EF_TMR32/tree/main
+  repo: github.com/efabless/EF_TMR32/tree/main
   owner: Efabless Corp.
   license: APACHE 2.0
   author: Mohamed Shalan
