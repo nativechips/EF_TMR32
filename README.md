@@ -227,7 +227,7 @@ The following are the bit definitions for the interrupt registers:
 ## Installation:
 You can either clone repo or use [IPM](https://github.com/efabless/IPM) which is an open-source IPs Package Manager
 * To clone repo:
-```git clone https://https://github.com/shalan/AUCOHL_TMR32.git```
+```git clone https://github.com/efabless/EF_TMR32/tree/main```
 * To download via IPM , follow installation guides [here](https://github.com/efabless/IPM/blob/main/README.md) then run 
 ```ipm install EF_TMR32```
 ## Simulation:
