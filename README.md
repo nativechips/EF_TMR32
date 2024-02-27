@@ -73,6 +73,7 @@ The timer reload value. In up counting it is used as the terminal count. For dow
 ### PR Register [Offset: 0x8, mode: w]
 
 The Prescaler. The timer counting frequency is $Clock\ freq/(PR + 1)$
+
 <img src="https://svg.wavedrom.com/{reg:[{name:'PR', bits:16},{bits: 16}], config: {lanes: 2, hflip: true}} "/>
 
 
