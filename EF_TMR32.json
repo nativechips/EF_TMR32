@@ -21,15 +21,15 @@
       "bus": [
         "generic"
       ],
-      "type\"": "soft",
+      "type": "soft",
       "status": "n/a",
       "qualification": "n/a",
       "cell_count": [
         1500,
         2000
       ],
-      "width\"": 0,
-      "height\"": 0,
+      "width": 0,
+      "height": 0,
       "technology": "n/a",
       "clock_freq_mhz": 50,
       "digital_supply_voltage": "n/a",
