@@ -9,7 +9,7 @@ from uvm.base.uvm_object_globals import UVM_FULL, UVM_LOW, UVM_ERROR
 from uvm.base.uvm_globals import run_test
 from EF_UVM.top_env import top_env
 from tmr32_interface.tmr32_if import tmr32_if
-from EF_UVM.wrapper_env.wrapper_interface.wrapper_if import wrapper_bus_if, wrapper_irq_if
+from EF_UVM.wrapper_env.wrapper_interface.wrapper_if import wrapper_ahb_if, wrapper_apb_if, wrapper_wb_if, wrapper_irq_if
 from cocotb_coverage.coverage import coverage_db
 from cocotb.triggers import Event, First
 from EF_UVM.wrapper_env.wrapper_regs import wrapper_regs
@@ -36,8 +36,14 @@ from tmr32_logger.tmr32_logger import tmr32_logger
 from EF_UVM.scoreboard import scoreboard
 from tmr32_coverage.tmr32_wrapper_coverage import tmr32_wrapper_coverage
 from EF_UVM.wrapper_env.wrapper_coverage.wrapper_coverage import wrapper_coverage
-# import cProfile
-# import pstats
+# 
+from EF_UVM.wrapper_env.wrapper_agent.wrapper_ahb_driver import wrapper_ahb_driver
+from EF_UVM.wrapper_env.wrapper_agent.wrapper_apb_driver import wrapper_apb_driver
+from EF_UVM.wrapper_env.wrapper_agent.wrapper_wb_driver import wrapper_wb_driver
+from EF_UVM.wrapper_env.wrapper_agent.wrapper_ahb_monitor import wrapper_ahb_monitor
+from EF_UVM.wrapper_env.wrapper_agent.wrapper_apb_monitor import wrapper_apb_monitor
+from EF_UVM.wrapper_env.wrapper_agent.wrapper_wb_monitor import wrapper_wb_monitor
+
 
 @cocotb.test()
 async def module_top(dut):
@@ -45,10 +51,18 @@ async def module_top(dut):
     # profiler.enable()
 
     pif = tmr32_if(dut)
-    w_if = wrapper_bus_if(dut)
+    BUS_TYPE = cocotb.plusargs['BUS_TYPE']
+    if BUS_TYPE == "APB":
+        w_if = wrapper_apb_if(dut)
+    elif BUS_TYPE == "AHB":
+        w_if = wrapper_ahb_if(dut)
+    elif BUS_TYPE == "WISHBONE":
+        w_if = wrapper_wb_if(dut)
+    else:
+        uvm_fatal("module_top", f"unknown bus type {BUS_TYPE}")
     w_irq_if = wrapper_irq_if(dut)
     UVMConfigDb.set(None, "*", "ip_if", pif)
-    UVMConfigDb.set(None, "*", "wrapper_bus_if", w_if)
+    UVMConfigDb.set(None, "*", "wrapper_if", w_if)
     UVMConfigDb.set(None, "*", "wrapper_irq_if", w_irq_if)
     yaml_file = []
     UVMRoot().clp.get_arg_values("+YAML_FILE=", yaml_file)
@@ -87,6 +101,13 @@ class base_test(UVMTest):
         self.set_type_override_by_type(ip_coverage.get_type(), tmr32_coverage.get_type())
         self.set_type_override_by_type(ip_logger.get_type(), tmr32_logger.get_type())
         self.set_type_override_by_type(wrapper_coverage.get_type(), tmr32_wrapper_coverage.get_type())
+        BUS_TYPE = cocotb.plusargs['BUS_TYPE']
+        if BUS_TYPE == "AHB":
+            self.set_type_override_by_type(wrapper_apb_driver.get_type(), wrapper_ahb_driver.get_type())
+            self.set_type_override_by_type(wrapper_apb_monitor.get_type(), wrapper_ahb_monitor.get_type())
+        elif BUS_TYPE == "WISHBONE":
+            self.set_type_override_by_type(wrapper_apb_driver.get_type(), wrapper_wb_driver.get_type())
+            self.set_type_override_by_type(wrapper_apb_monitor.get_type(), wrapper_wb_monitor.get_type())
         # self.set_type_override_by_type(scoreboard.get_type(), tmr32_scoreboard.get_type())
         # Enable transaction recording for everything
         UVMConfigDb.set(self, "*", "recording_detail", UVM_FULL)
@@ -102,8 +123,8 @@ class base_test(UVMTest):
         else:
             uvm_fatal("NOVIF", "Could not get ip_if from config DB")
 
-        if UVMConfigDb.get(None, "*", "wrapper_bus_if", arr) is True:
-            UVMConfigDb.set(self, "*", "wrapper_bus_if", arr[0])
+        if UVMConfigDb.get(None, "*", "wrapper_if", arr) is True:
+            UVMConfigDb.set(self, "*", "wrapper_if", arr[0])
         else:
             uvm_fatal("NOVIF", "Could not get wrapper_bus_if from config DB")
         # set max number of uvm errors

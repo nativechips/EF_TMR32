@@ -43,6 +43,8 @@ class tmr32_VIP(VIP):
         uvm_info(self.tag, "Vip write: " + tr.convert2string(), UVM_HIGH)
         if tr.reset:
             self.wrapper_bus_export.write(tr)
+            uvm_info("vip", "reset from the vip", UVM_LOW)
+            self.regs.write_reg_value("CTRL", 0, force_write=True)
             return
         if tr.kind == wrapper_bus_item.WRITE:
             self.bus_write_event.set()
@@ -73,17 +75,17 @@ class tmr32_VIP(VIP):
     async def timer(self):
         mode = self.regs.read_reg_value("CFG") & 0b11
         PR = self.regs.read_reg_value("PR")
-        uvm_info(self.tag, f"function timer mode = {bin(mode)} and PR = {bin(PR)}", UVM_HIGH)
-        # counter = 0 if self.regs.read_reg_value("CFG") & 0b10 == 0b10 else self.regs.read_reg_value("RELOAD") # 0 counting up or up/down reload count down
-        await self.event_calibrate_tmr.wait()
-        self.event_calibrate_tmr.clear()
-        counter_calibration_val = self.regs.read_reg_value("TMR")
-        counter = counter_calibration_val + 1 if self.regs.read_reg_value("CFG") & 0b10 == 0b10 else counter_calibration_val - 1
+        counter = 0 if self.regs.read_reg_value("CFG") & 0b10 == 0b10 else self.regs.read_reg_value("RELOAD") # 0 counting up or up/down reload count down
+        uvm_info(self.tag, f"function timer mode = {bin(mode)} and PR = {bin(PR)} counter = {counter} ", UVM_LOW)
+        # await self.event_calibrate_tmr.wait()
+        # self.event_calibrate_tmr.clear()
+        # counter_calibration_val = self.regs.read_reg_value("TMR")
+        # counter = counter_calibration_val + 1 if self.regs.read_reg_value("CFG") & 0b10 == 0b10 else counter_calibration_val - 1
         count_step = (self.regs.read_reg_value("PR") + 1) * self.clock_period
         count_type = "up" if self.regs.read_reg_value("CFG") & 0b10 == 0b10 else "down"
         uvm_info(self.tag, f"count_step: {count_step}, count_type: {count_type}", UVM_HIGH)
-        if PR >= 2:
-            await Timer(self.clock_period * 2, 'ns')
+        # if PR >= 2:
+        #     await Timer(self.clock_period * 2, 'ns')
 
         await Timer(self.clock_period, 'ns')
         self.regs.write_reg_value("TMR", counter, force_write=True)
@@ -117,14 +119,16 @@ class tmr32_VIP(VIP):
 
     async def wait_start_counting(self):
         # start counting when timer enable 1 then 0
-        while self.regs.read_reg_value("CTRL") & 0b11 != 0b11:  # wait until timer enable
+        while self.regs.read_reg_value("CTRL") & 0b1 != 0b1:  # wait until timer enable
             await self.bus_write_event.wait()
+        uvm_info("vip", f"start counting from vip", UVM_LOW)
         # while self.regs.read_reg_value("CTRL") & 0b11 != 0b01:  # wait until timer restarted
         #     await self.bus_write_event.wait()
 
     async def wait_for_stop_counting(self):
-        while self.regs.read_reg_value("CTRL") & 0b11 != 0b00:  # wait until timer restarted
+        while self.regs.read_reg_value("CTRL") & 0b1 != 0b0:  # wait until timer restarted
             await self.bus_write_event.wait()
+        uvm_info("vip", f"stop counting from vip", UVM_LOW)
 
     def calculate_timeout_cycles(self):
         num_cycles = self.regs.read_reg_value("RELOAD") * (self.regs.read_reg_value("PR") + 1)

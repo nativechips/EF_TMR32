@@ -1,14 +1,26 @@
 PLUSARGS += "+UVM_VERBOSITY=UVM_MEDIUM"
 TOPLEVEL := top
 MODULE   ?= top_module
-VERILOG_SOURCES ?=  $(PWD)/top.v $(PWD)/../../hdl/rtl/bus_wrappers/EF_TMR32_APB.pp.v  $(PWD)/../../hdl/rtl/EF_TMR32.pp.v
-RTL_MACROS ?= ""
+AHB_FILES ?= $(PWD)/../../hdl/rtl/bus_wrappers/EF_TMR32_AHBL.pp.v
+APB_FILES ?= $(PWD)/../../hdl/rtl/bus_wrappers/EF_TMR32_APB.pp.v
+WB_FILES ?= ""
+HDL_FILES ?=  $(PWD)/../../hdl/rtl/EF_TMR32.pp.v
+VERILOG_SOURCES ?=  $(PWD)/top.v $(AHB_FILES) $(APB_FILES) $(WB_FILES) $(HDL_FILES)
+RTL_MACROS += ""
+BUS_TYPE ?= APB
+ifeq ($(BUS_TYPE),APB)
+    RTL_MACROS += -DBUS_TYPE_APB
+else ifeq ($(BUS_TYPE),AHB)
+    RTL_MACROS += -DBUS_TYPE_AHB
+else ifeq ($(BUS_TYPE),WISHBONE)
+    RTL_MACROS += -DBUS_TYPE_WISHBONE
+endif
 YAML_FILE = $(PWD)/../../EF_TMR32.yaml
 MAKEFLAGS += --no-print-directory
 
 # List of tests
-TESTS := tmr32_Try time_vary_test temp_test
-TESTS := temp_test
+TESTS := tmr32_Try time_vary_test
+# TESTS := time_vary_test
 
 # Variable for tag - set this as required
 SIM_TAG ?= default_tag
@@ -18,7 +30,7 @@ SIM_PATH := $(PWD)/sim/$(SIM_TAG)
 
 clone_ef_uvm := $(shell if [ ! -d "EF_UVM" ]; then \
 	echo "Cloning the EF_UVM repository..."; \
-	git clone https://github.com/M0stafaRady/EF_UVM.git; \
+	git clone https://github.com/efabless/EF_UVM.git; \
 fi;)
 
 # clone_ip_util := $(shell if [ ! -d "IP_Utilities" ]; then \
