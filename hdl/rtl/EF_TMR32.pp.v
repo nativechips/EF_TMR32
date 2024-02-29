@@ -93,7 +93,7 @@ module aucohl_ticker #(parameter W=8) (
             else
                 counter <=  counter - 'b1; 
 
-    assign tick_w = (clk_div == 'b1)  ?   1'b1 : counter_is_zero;
+	assign tick_w = (clk_div == 'b0)  ?   1'b1 : counter_is_zero;
 
     always @(posedge clk or negedge rst_n)
         if(!rst_n)
@@ -114,6 +114,7 @@ module aucohl_glitch_filter #(parameter N = 8, CLKDIV = 1) (
     input   wire    clk,
     input   wire    rst_n,
     input   wire    in,
+    input   wire    en,
     output  reg     out
 );
 
@@ -123,6 +124,7 @@ module aucohl_glitch_filter #(parameter N = 8, CLKDIV = 1) (
     aucohl_ticker ticker (
         .clk(clk),
         .rst_n(rst_n),
+	.en(en),
         .clk_div(CLKDIV),
         .tick(tick)
     );
@@ -352,6 +354,8 @@ module EF_TMR32 #(parameter PRW = 16,
             tmr_reg_next = tmr_reload;
         else if(tmr_start & (tmr_mode == 2'b10))
             tmr_reg_next = 0;
+        else if(tmr_start & (tmr_mode == 2'b11))
+            tmr_reg_next = 0;
         else if(tmr_mode == 2'b11) begin
             if(tmr_dir)
                 tmr_reg_next = tmr_reg + 1;
@@ -376,9 +380,9 @@ module EF_TMR32 #(parameter PRW = 16,
     if(tmr_en)
         if(tmr_clr)
             if(tmr_mode == 2'b01)
-                tmr_reg = tmr_reload;
+                tmr_reg <= tmr_reload;
             else
-                tmr_reg = 0;
+                tmr_reg <= 0;
         else 
             if(tick)
                 tmr_reg <=  tmr_reg_next;
@@ -389,19 +393,19 @@ module EF_TMR32 #(parameter PRW = 16,
                                                     else
         if(tmr_clr)
             if(tmr_mode == 2'b01)
-                tmr_dir = 0;
+                tmr_dir <= 0;
             else
-                tmr_dir = 1;
+                tmr_dir <= 1;
         else if(tick)
             if(tmr_mode == 2'b11) begin
                 if(tmr_eq_one & ~tmr_dir) 
                     tmr_dir <= 1;
                 else if(tmr_eq_reload_m_1 & tmr_dir)
-                    tmr_dir = 0;
+                    tmr_dir <= 0;
             end
             else if(tmr_mode == 2'b10)
                 tmr_dir <= 1'b1;
-            else if(tmr_mode == 2'b10)
+            else if(tmr_mode == 2'b01)
                 tmr_dir <= 1'b0;
             else
                 tmr_dir <= 1'b1;
@@ -420,7 +424,6 @@ module EF_TMR32 #(parameter PRW = 16,
     reg     pwm1_reg, pwm1_reg_next;
 
     always @* begin
-        pwm0_reg_next = pwm0_reg;
         casez({tmr_dir, tmr_eq_zero, tmr_eq_cmpx, tmr_eq_cmpy, tmr_eq_reload})
             5'b?_1_00_0 : pwm0_reg_next = pwm_action(pwm0_cfg[ 1: 0], pwm0_reg);    // U/D, 0
             5'b1_0_10_0 : pwm0_reg_next = pwm_action(pwm0_cfg[ 3: 2], pwm0_reg);    // U, CMPX
@@ -428,11 +431,11 @@ module EF_TMR32 #(parameter PRW = 16,
             5'b?_0_00_1 : pwm0_reg_next = pwm_action(pwm0_cfg[ 7: 6], pwm0_reg);    // U/D, RELOAD
             5'b0_0_01_0 : pwm0_reg_next = pwm_action(pwm0_cfg[ 9: 8], pwm0_reg);    // D, CMPY
             5'b0_0_10_0 : pwm0_reg_next = pwm_action(pwm0_cfg[11:10], pwm0_reg);    // D, CMPX
+            default     : pwm0_reg_next = pwm0_reg;
         endcase        
     end
 
     always @* begin
-        pwm1_reg_next = pwm1_reg;
         casez({tmr_dir, tmr_eq_zero, tmr_eq_cmpx, tmr_eq_cmpy, tmr_eq_reload})
             5'b?_1_00_0 : pwm1_reg_next = pwm_action(pwm1_cfg[ 1: 0], pwm1_reg);    // U/D, 0
             5'b1_0_10_0 : pwm1_reg_next = pwm_action(pwm1_cfg[ 3: 2], pwm1_reg);    // U, CMPX
@@ -440,6 +443,7 @@ module EF_TMR32 #(parameter PRW = 16,
             5'b?_0_00_1 : pwm1_reg_next = pwm_action(pwm1_cfg[ 7: 6], pwm1_reg);    // U/D, RELOAD
             5'b0_0_01_0 : pwm1_reg_next = pwm_action(pwm1_cfg[ 9: 8], pwm1_reg);    // D, CMPY
             5'b0_0_10_0 : pwm1_reg_next = pwm_action(pwm1_cfg[11:10], pwm1_reg);    // D, CMPX
+            default     : pwm1_reg_next = pwm1_reg;
         endcase        
     end
 
@@ -485,12 +489,12 @@ module EF_TMR32 #(parameter PRW = 16,
     always @(posedge clk, negedge rst_n)
                                                     if(!rst_n) pwm0_w_dt <= 0;
                                                     else
-        pwm0_w_dt = pwm_dt_en ? (pwm0_delayed & pwm0_reg) : pwm0_reg;
+        pwm0_w_dt <= pwm_dt_en ? (pwm0_delayed & pwm0_reg) : pwm0_reg;
 
     always @(posedge clk, negedge rst_n)
                                                     if(!rst_n) pwm1_w_dt <= 0;
                                                     else
-        pwm1_w_dt = pwm_dt_en ? (~pwm0_delayed & ~pwm0_reg) : pwm1_reg;
+        pwm1_w_dt <= pwm_dt_en ? (~pwm0_delayed & ~pwm0_reg) : pwm1_reg;
     
     // PWM Fault Handeling
     reg fault_clr_reg;
@@ -511,8 +515,8 @@ module EF_TMR32 #(parameter PRW = 16,
             
     // Connect the outputs
     assign  tmr             =   tmr_reg;
-    assign  pwm0            =   pwm0_w_dt ^ pwm0_inv;
-    assign  pwm1            =   pwm1_w_dt ^ pwm1_inv;
+    assign  pwm0            =   pwm0_w_dt ^ pwm0_inv && ~fault_reg && pwm0_en;
+    assign  pwm1            =   pwm1_w_dt ^ pwm1_inv && ~fault_reg && pwm1_en;
     assign  matchx_flag     =   tmr_eq_cmpx;
     assign  matchy_flag     =   tmr_eq_cmpy;
     assign  timeout_flag    =   tmr_dir ? tmr_eq_reload : tmr_eq_zero;
