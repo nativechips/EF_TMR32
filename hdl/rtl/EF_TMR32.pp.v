@@ -110,7 +110,7 @@ endmodule
 /*
     A glitch filter
 */
-module aucohl_glitch_filter #(parameter N = 8, CLKDIV = 8'b1) (
+module aucohl_glitch_filter #(parameter N = 8, CLKDIV = 1) (
     input   wire    clk,
     input   wire    rst_n,
     input   wire    in,
@@ -121,7 +121,7 @@ module aucohl_glitch_filter #(parameter N = 8, CLKDIV = 8'b1) (
     reg [N-1:0] shifter;
     wire        tick;
 
-    aucohl_ticker#(8) ticker (
+    aucohl_ticker ticker (
         .clk(clk),
         .rst_n(rst_n),
 	.en(en),
