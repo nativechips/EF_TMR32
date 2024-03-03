@@ -89,7 +89,7 @@ class tmr32_VIP(VIP):
 
         await Timer(self.clock_period, 'ns')
         self.regs.write_reg_value("TMR", counter, force_write=True)
-        uvm_info(self.tag, f"counter: {hex(counter)}", UVM_LOW)
+        uvm_info(self.tag, f"counter: {hex(counter)}", UVM_HIGH)
         while True:
             if count_type == "up":
                 counter += 1
@@ -115,7 +115,7 @@ class tmr32_VIP(VIP):
                             return
             await Timer(count_step, 'ns')
             self.regs.write_reg_value("TMR", counter, force_write=True)
-            uvm_info(self.tag, f"counter: {hex(counter)}", UVM_LOW)
+            uvm_info(self.tag, f"counter: {hex(counter)}", UVM_HIGH)
 
     async def wait_start_counting(self):
         # start counting when timer enable 1 then 0

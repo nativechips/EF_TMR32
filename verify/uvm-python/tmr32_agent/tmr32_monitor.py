@@ -15,9 +15,12 @@ class tmr32_monitor(ip_monitor):
         super().__init__(name, parent)
 
     async def run_phase(self, phase):
-        sample_pwm0 = await cocotb.start(self.sample_pwm(self.vif.pwm0, tmr32_pwm_item.pwm0))
-        sample_pwm1 = await cocotb.start(self.sample_pwm(self.vif.pwm1, tmr32_pwm_item.pwm1))
-        await Combine(sample_pwm0, sample_pwm1)
+        while True:
+            sample_pwm0 = await cocotb.start(self.sample_pwm(self.vif.pwm0, tmr32_pwm_item.pwm0))
+            sample_pwm1 = await cocotb.start(self.sample_pwm(self.vif.pwm1, tmr32_pwm_item.pwm1))
+            await self.wait_reset() # wait for reset
+            sample_pwm0.kill()
+            sample_pwm1.kill()
 
     async def sample_pwm(self, signal, source):
         for _ in range(3):
@@ -33,7 +36,7 @@ class tmr32_monitor(ip_monitor):
             extracted_pattern = None
             while extracted_pattern is None:
                 # start detect pattern
-                await RisingEdge(self.vif.PCLK)
+                await RisingEdge(self.vif.CLK)
                 if old_val != signal.value:
                     pattern_int.append((old_val, count))
                     old_val = signal.value
@@ -55,7 +58,7 @@ class tmr32_monitor(ip_monitor):
             tr.source = source
             tr.pattern = extracted_pattern
             self.monitor_port.write(tr)
-            uvm_info(self.tag, "sampled {source} transaction: " + tr.convert2string(), UVM_LOW)
+            uvm_info(self.tag, f"sampled {source} transaction: " + tr.convert2string(), UVM_LOW)
 
     def find_repeating_pattern(self, lst):
         n = len(lst)
@@ -89,6 +92,9 @@ class tmr32_monitor(ip_monitor):
                         return pattern
             else:
                 continue
+
+    async def wait_reset(self):
+        await FallingEdge(self.vif.RESETn)
 
 
 uvm_component_utils(tmr32_monitor)

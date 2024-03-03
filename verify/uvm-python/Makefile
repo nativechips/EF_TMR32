@@ -19,8 +19,8 @@ YAML_FILE = $(PWD)/../../EF_TMR32.yaml
 MAKEFLAGS += --no-print-directory
 
 # List of tests
-TESTS := tmr32_Try time_vary_test
-# TESTS := time_vary_test
+TESTS := pwm_actions_test time_vary_test pwm_pr_test pwm_tmr_test
+# TESTS := pwm_tmr_test
 
 # Variable for tag - set this as required
 SIM_TAG ?= default_tag

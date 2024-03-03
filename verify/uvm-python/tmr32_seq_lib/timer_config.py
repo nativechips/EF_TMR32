@@ -20,8 +20,9 @@ class timer_config(wrapper_seq_base):
 
     async def read_timer_val(self):
         await self.send_req(is_write=False, reg="TMR")
+
     async def start_timer(self, pwm_enable=[0, 0], pwm_inverted=[0, 0]):
-        value = 0b1 | pwm_enable[0] >> 2 | pwm_enable[1] >> 3 | pwm_inverted[0] >> 5 | pwm_inverted[1] >> 6
+        value = 0b1 | pwm_enable[0] << 2 | pwm_enable[1] << 3 | pwm_inverted[0] << 5 | pwm_inverted[1] << 6
         await self.send_req(is_write=True, reg="CTRL", data_condition=lambda data: data & 0b1111111 == 0b10)
         await self.send_req(is_write=True, reg="CTRL", data_condition=lambda data: data & 0b1111111 == 0b00)
         await self.send_req(is_write=True, reg="CTRL", data_condition=lambda data: data & 0b1111111 == value) # restart
