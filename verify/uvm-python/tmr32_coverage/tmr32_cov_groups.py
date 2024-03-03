@@ -23,7 +23,7 @@ class tmr32_cov_groups():
             rel=lambda val, b: b[0] <= val <= b[1]
         )
         @CoverPoint(
-            f"{self.hierarchy}.Relaod",
+            f"{self.hierarchy}.Compare Values.Relaod",
             xf=lambda tr: (self.regs.read_reg_value("RELOAD")),
             bins=[( i*1000 , (i+1)*1000) for i in range(5)],
             bins_labels=[( i*1000 , (i+1)*1000) for i in range(5)],
@@ -31,7 +31,7 @@ class tmr32_cov_groups():
             rel=lambda val, b: b[0] <= val <= b[1]
         )
         @CoverPoint(
-            f"{self.hierarchy}.Compare Reg X",
+            f"{self.hierarchy}.Compare Values.Compare Reg X",
             xf=lambda tr: (self.regs.read_reg_value("CMPX")),
             bins=[( i*1000 , (i+1)*1000) for i in range(5)],
             bins_labels=[( i*1000 , (i+1)*1000) for i in range(5)],
@@ -39,41 +39,41 @@ class tmr32_cov_groups():
             rel=lambda val, b: b[0] <= val <= b[1]
         )
         @CoverPoint(
-            f"{self.hierarchy}.Compare Reg Y",
+            f"{self.hierarchy}.Compare Values.Compare Reg Y",
             xf=lambda tr: (self.regs.read_reg_value("CMPX")),
             bins=[( i*1000 , (i+1)*1000) for i in range(5)],
             bins_labels=[( i*1000 , (i+1)*1000) for i in range(5)],
             # at_least=3,
             rel=lambda val, b: b[0] <= val <= b[1]
         )
-        @CoverPoint(
-            f"{self.hierarchy}.Timer Enable",
-            xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b1 == 0b1),
-            bins=[True, False],
-            bins_labels=["timer enabled" if i else "timer disabled" for i in [True, False]],
-            # at_least=3,
-        )
-        @CoverPoint(
-            f"{self.hierarchy}.Timer Restart",
-            xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b10 == 0b10),
-            bins=[True, False],
-            bins_labels=["timer restarted" if i else "timer not restarted" for i in [True, False]],
-            # at_least=3,
-        )
-        @CoverPoint(
-            f"{self.hierarchy}.PWM0 Enable",
-            xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b100 == 0b100),
-            bins=[True, False],
-            bins_labels=["pwm0 enabled" if i else "pwm0 disabled" for i in [True, False]],
-            # at_least=3,
-        )
-        @CoverPoint(
-            f"{self.hierarchy}.PWM1 Enable",
-            xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b1000 == 0b1000),
-            bins=[True, False],
-            bins_labels=["pwm1 enabled" if i else "pwm1 disabled" for i in [True, False]],
-            # at_least=3,
-        )
+        # @CoverPoint(
+        #     f"{self.hierarchy}.Timer Enable",
+        #     xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b1 == 0b1),
+        #     bins=[True, False],
+        #     bins_labels=["timer enabled" if i else "timer disabled" for i in [True, False]],
+        #     # at_least=3,
+        # )
+        # @CoverPoint(
+        #     f"{self.hierarchy}.Timer Restart",
+        #     xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b10 == 0b10),
+        #     bins=[True, False],
+        #     bins_labels=["timer restarted" if i else "timer not restarted" for i in [True, False]],
+        #     # at_least=3,
+        # )
+        # @CoverPoint(
+        #     f"{self.hierarchy}.PWM0 Enable",
+        #     xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b100 == 0b100),
+        #     bins=[True, False],
+        #     bins_labels=["pwm0 enabled" if i else "pwm0 disabled" for i in [True, False]],
+        #     # at_least=3,
+        # )
+        # @CoverPoint(
+        #     f"{self.hierarchy}.PWM1 Enable",
+        #     xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b1000 == 0b1000),
+        #     bins=[True, False],
+        #     bins_labels=["pwm1 enabled" if i else "pwm1 disabled" for i in [True, False]],
+        #     # at_least=3,
+        # )
         @CoverPoint(
             f"{self.hierarchy}.PWM Deadtime Enable",
             xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b10000 == 0b10000),
@@ -82,33 +82,33 @@ class tmr32_cov_groups():
             # at_least=3,
         )
         @CoverPoint(
-            f"{self.hierarchy}.Invert PWM0",
+            f"{self.hierarchy}.PWM0.Invert",
             xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b100000 == 0b100000),
             bins=[True, False],
             bins_labels=["PWM0 output inverted" if i else "PWM0 output not inverted" for i in [True, False]],
             # at_least=3,
         )
         @CoverPoint(
-            f"{self.hierarchy}.Invert PWM1",
+            f"{self.hierarchy}.PWM1.Invert",
             xf=lambda tr: (self.regs.read_reg_value("CTRL") & 0b1000000 == 0b1000000),
             bins=[True, False],
             bins_labels=["PWM1 output inverted" if i else "PWM1 output not inverted" for i in [True, False]],
             # at_least=3,
         )
-        @CoverPoint(
-            f"{self.hierarchy}.Timer Count Direction",
-            xf=lambda tr: (self.regs.read_reg_value("CFG") & 0b11),
-            bins=[0b10, 0b01, 0b11 ],
-            bins_labels=["Up Counting", "Down Counting", "UP/Down Counting"],
-            # at_least=3,
-        )
-        @CoverPoint(
-            f"{self.hierarchy}.Timer Count Periodic or One Shot",
-            xf=lambda tr: (self.regs.read_reg_value("CFG") & 0b100 == 0b100),
-            bins=[True, False],
-            bins_labels=["Periodic Count" if i else "One Shot Count" for i in [True, False]],
-            # at_least=3,
-        )
+        # @CoverPoint(
+        #     f"{self.hierarchy}.Timer Count Direction",
+        #     xf=lambda tr: (self.regs.read_reg_value("CFG") & 0b11),
+        #     bins=[0b10, 0b01, 0b11 ],
+        #     bins_labels=["Up Counting", "Down Counting", "UP/Down Counting"],
+        #     # at_least=3,
+        # )
+        # @CoverPoint(
+        #     f"{self.hierarchy}.Timer Count Periodic or One Shot",
+        #     xf=lambda tr: (self.regs.read_reg_value("CFG") & 0b100 == 0b100),
+        #     bins=[True, False],
+        #     bins_labels=["Periodic Count" if i else "One Shot Count" for i in [True, False]],
+        #     # at_least=3,
+        # )
 
         def sample(tr):
             uvm_info("coverage_ip", f"tr = {tr}", UVM_LOW)
@@ -132,7 +132,7 @@ class tmr32_cov_groups():
                 # PWM0
                     #Up Count
                     cov_points.append(CoverPoint(
-                        f"{self.hierarchy}.PWM0. Up Count.{action1_label} , {action2_label}",
+                        f"{self.hierarchy}.PWM0.Patterns.Up Count.{action1_label} , {action2_label}",
                         xf=lambda tr, action1 = action1, action2 = action2: ((self.regs.read_reg_value("CFG") & 0b11)==0b10 , self.get_event_with_action(self.regs.read_reg_value("PWM0CFG"), action1, DownCount=False) , self.get_event_with_action(self.regs.read_reg_value("PWM0CFG"), action2, DownCount=False)),
                         bins=[ (True , i, j) for i in range(4) for j in range(4) if i!=j ],
                         bins_labels=[( "Up Count" , f"{i}  {action1_label}" , f"{j}  {action2_label}") for i in ["Zero", "CMPX", "CMPY", "Reload"] for j in ["Zero", "CMPX","CMPY", "Reload"] if i!=j],
@@ -141,7 +141,7 @@ class tmr32_cov_groups():
                     ))
                     # Down Count
                     cov_points.append(CoverPoint(
-                        f"{self.hierarchy}.PWM0. Down Count.{action1_label} , {action2_label}",
+                        f"{self.hierarchy}.PWM0.Patterns.Down Count.{action1_label} , {action2_label}",
                         xf=lambda tr, action1 = action1, action2 = action2: ((self.regs.read_reg_value("CFG") & 0b11)==0b01 , self.get_event_with_action(self.regs.read_reg_value("PWM0CFG"), action1, DownCount=True) , self.get_event_with_action(self.regs.read_reg_value("PWM0CFG"), action2, DownCount=True)),
                         bins=[ (True , i, j) for i in [0,3,4,5] for j in [0,3,4,5] if i!=j ],
                         bins_labels=[( "Down Count" , f"{i}  {action1_label}" , f"{j}  {action2_label}") for i in ["Zero", "Reload", "CMPX", "CMPY"] for j in ["Zero", "Reload", "CMPX", "CMPY"] if i!=j],
@@ -150,7 +150,7 @@ class tmr32_cov_groups():
                     ))
                     # Up Down Count
                     cov_points.append(CoverPoint(
-                        f"{self.hierarchy}.PWM0. Up Down Count.{action1_label} , {action2_label}",
+                        f"{self.hierarchy}.PWM0.Patterns.Up Down Count.{action1_label} , {action2_label}",
                         xf=lambda tr, action1 = action1, action2 = action2: ((self.regs.read_reg_value("CFG") & 0b11)==0b11 , self.get_event_with_action(self.regs.read_reg_value("PWM0CFG"), action1, DownCount=False) , self.get_event_with_action(self.regs.read_reg_value("PWM0CFG"), action2, DownCount=False)),
                         bins=[ (True , i, j) for i in range(6) for j in range(6) if i!=j ],
                         bins_labels=[( "Up Down Count" , f"{i}  {action1_label}" , f"{j}  {action2_label}") for i in ["Zero", "CMPX (up)", "CMPY (up)", "Reload", "CMPX (down)", "CMPY (down)"] for j in ["Zero", "CMPX (up)", "CMPY (up)", "Reload", "CMPX (down)", "CMPY (down)"] if i!=j],
@@ -160,7 +160,7 @@ class tmr32_cov_groups():
                 # PWM1
                     # Up Count 
                     cov_points.append(CoverPoint(
-                        f"{self.hierarchy}.PWM1. Up Count.{action1_label} , {action2_label}",
+                        f"{self.hierarchy}.PWM1.Patterns.Up Count.{action1_label} , {action2_label}",
                         xf=lambda tr, action1 = action1, action2 = action2: ((self.regs.read_reg_value("CFG") & 0b11)==0b10 , self.get_event_with_action(self.regs.read_reg_value("PWM1CFG"), action1, DownCount=False) , self.get_event_with_action(self.regs.read_reg_value("PWM1CFG"), action2, DownCount=False)),
                         bins=[ (True , i, j) for i in range(4) for j in range(4) if i!=j ],
                         bins_labels=[( "Up Count" , f"{i}  {action1_label}" , f"{j}  {action2_label}") for i in ["Zero", "CMPX", "CMPY", "Reload"] for j in ["Zero", "CMPX","CMPY", "Reload"] if i!=j],
@@ -169,7 +169,7 @@ class tmr32_cov_groups():
                     ))
                     # Down Count
                     cov_points.append(CoverPoint(
-                        f"{self.hierarchy}.PWM1. Down Count.{action1_label} , {action2_label}",
+                        f"{self.hierarchy}.PWM1.Patterns.Down Count.{action1_label} , {action2_label}",
                         xf=lambda tr, action1 = action1, action2 = action2: ((self.regs.read_reg_value("CFG") & 0b11)==0b01 , self.get_event_with_action(self.regs.read_reg_value("PWM1CFG"), action1, DownCount=True) , self.get_event_with_action(self.regs.read_reg_value("PWM1CFG"), action2, DownCount=True)),
                         bins=[ (True , i, j) for i in [0,3,4,5] for j in [0,3,4,5] if i!=j ],
                         bins_labels=[( "Down Count" , f"{i}  {action1_label}" , f"{j}  {action2_label}") for i in ["Zero", "Reload", "CMPX", "CMPY"] for j in ["Zero", "Reload", "CMPX", "CMPY"] if i!=j],
@@ -178,7 +178,7 @@ class tmr32_cov_groups():
                     ))
                     # Up Down Count
                     cov_points.append(CoverPoint(
-                        f"{self.hierarchy}.PWM1. Up Down Count.{action1_label} , {action2_label}",
+                        f"{self.hierarchy}.PWM1.Patterns.Up Down Count.{action1_label} , {action2_label}",
                         xf=lambda tr, action1 = action1, action2 = action2: ((self.regs.read_reg_value("CFG") & 0b11)==0b11 , self.get_event_with_action(self.regs.read_reg_value("PWM1CFG"), action1, DownCount=False) , self.get_event_with_action(self.regs.read_reg_value("PWM1CFG"), action2, DownCount=False)),
                         bins=[ (True , i, j) for i in range(6) for j in range(6) if i!=j ],
                         bins_labels=[( "Up Down Count" , f"{i}  {action1_label}" , f"{j}  {action2_label}") for i in ["Zero", "CMPX (up)", "CMPY (up)", "Reload", "CMPX (down)", "CMPY (down)"] for j in ["Zero", "CMPX (up)", "CMPY (up)", "Reload", "CMPX (down)", "CMPY (down)"] if i!=j],
