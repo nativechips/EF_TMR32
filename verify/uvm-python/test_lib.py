@@ -18,7 +18,9 @@ from uvm.base import UVMRoot
 
 # seq
 from EF_UVM.wrapper_env.wrapper_seq_lib.write_read_regs import write_read_regs
-from tmr32_seq_lib.pwmA_try import pwmA_try
+from tmr32_seq_lib.pwm_actions_seq import pwm_actions_seq
+from tmr32_seq_lib.pwm_pr_seq import pwm_pr_seq
+from tmr32_seq_lib.pwm_tmr_seq import pwm_tmr_seq
 from tmr32_seq_lib.timer_vary import timer_vary
 from tmr32_seq_lib.temp import temp
 
@@ -163,20 +165,52 @@ class base_test(UVMTest):
 uvm_component_utils(base_test)
 
 
-class tmr32_Try(base_test):
-    def __init__(self, name="tmr32_Try", parent=None):
+class pwm_actions_test(base_test):
+    def __init__(self, name="pwm_test", parent=None):
         super().__init__(name, parent)
         self.tag = name
 
     async def run_phase(self, phase):
         uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
         phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
-        wrapper_seq = pwmA_try("pwmA_try")
+        wrapper_seq = pwm_actions_seq("pwm_actions_seq")
         await wrapper_seq.start(self.wrapper_sqr)
         phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
 
 
-uvm_component_utils(tmr32_Try)
+uvm_component_utils(pwm_actions_test)
+
+
+class pwm_pr_test(base_test):
+    def __init__(self, name="pwm_test", parent=None):
+        super().__init__(name, parent)
+        self.tag = name
+
+    async def run_phase(self, phase):
+        uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
+        phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
+        wrapper_seq = pwm_pr_seq("pwm_pr_seq")
+        await wrapper_seq.start(self.wrapper_sqr)
+        phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
+
+
+uvm_component_utils(pwm_pr_test)
+
+
+class pwm_tmr_test(base_test):
+    def __init__(self, name="pwm_tmr_test", parent=None):
+        super().__init__(name, parent)
+        self.tag = name
+
+    async def run_phase(self, phase):
+        uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
+        phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
+        wrapper_seq = pwm_tmr_seq("pwm_tmr_seq")
+        await wrapper_seq.start(self.wrapper_sqr)
+        phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
+
+
+uvm_component_utils(pwm_tmr_test)
 
 
 class time_vary_test(base_test):
