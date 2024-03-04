@@ -1,5 +1,5 @@
 /*
-	Copyright 2024 Efabless
+	Copyright 2024 Efabless Corp.
 
 	Author: Mohamed Shalan (mshalan@aucegypt.edu)
 
@@ -21,6 +21,62 @@
 
 `timescale			1ns/1ps
 `default_nettype	none
+
+
+
+/*
+	Copyright 2020 AUCOHL
+
+    Author: Mohamed Shalan (mshalan@aucegypt.edu)
+	
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at:
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software 
+	distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and 
+	limitations under the License.
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -86,10 +142,10 @@ module EF_TMR32_AHBL#(
 	wire [32-1:0]	cmpy;
 	wire [PRW-1:0]	prescaler;
 	wire [3-1:0]	tmr_cfg;
-	wire [1-1:0]	pwm0_inv;
-	wire [1-1:0]	pwm1_inv;
 	wire [12-1:0]	pwm0_cfg;
 	wire [12-1:0]	pwm1_cfg;
+	wire [1-1:0]	pwm0_inv;
+	wire [1-1:0]	pwm1_inv;
 	wire [8-1:0]	pwm_dt;
 	wire [16-1:0]	pwm_fault_clr;
 	wire [1-1:0]	pwm_dt_en;
@@ -126,7 +182,7 @@ module EF_TMR32_AHBL#(
                                         else if(ahbl_we & (last_HADDR[16-1:0]==CMPY_REG_OFFSET))
                                             CMPY_REG <= HWDATA[32-1:0];
 
-	reg [5-1:0]	CTRL_REG;
+	reg [7-1:0]	CTRL_REG;
 	assign	tmr_en	=	CTRL_REG[0 : 0];
 	assign	tmr_start	=	CTRL_REG[1 : 1];
 	assign	pwm0_en	=	CTRL_REG[2 : 2];
@@ -136,7 +192,7 @@ module EF_TMR32_AHBL#(
 	assign	pwm1_inv	=	CTRL_REG[6 : 6];
 	always @(posedge HCLK or negedge HRESETn) if(~HRESETn) CTRL_REG <= 0;
                                         else if(ahbl_we & (last_HADDR[16-1:0]==CTRL_REG_OFFSET))
-                                            CTRL_REG <= HWDATA[5-1:0];
+                                            CTRL_REG <= HWDATA[7-1:0];
 
 	reg [3-1:0]	CFG_REG;
 	assign	tmr_cfg = CFG_REG;
@@ -209,10 +265,10 @@ module EF_TMR32_AHBL#(
 		.cmpy(cmpy),
 		.prescaler(prescaler),
 		.tmr_cfg(tmr_cfg),
-		.pwm0_inv(pwm0_inv),
-		.pwm1_inv(pwm1_inv),
 		.pwm0_cfg(pwm0_cfg),
 		.pwm1_cfg(pwm1_cfg),
+		.pwm0_inv(pwm0_inv),
+		.pwm1_inv(pwm1_inv),
 		.pwm_dt(pwm_dt),
 		.pwm_fault_clr(pwm_fault_clr),
 		.pwm_dt_en(pwm_dt_en),

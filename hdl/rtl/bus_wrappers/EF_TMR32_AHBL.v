@@ -1,5 +1,5 @@
 /*
-	Copyright 2024 Efabless
+	Copyright 2024 Efabless Corp.
 
 	Author: Mohamed Shalan (mshalan@aucegypt.edu)
 
@@ -66,10 +66,10 @@ module EF_TMR32_AHBL#(
 	wire [32-1:0]	cmpy;
 	wire [PRW-1:0]	prescaler;
 	wire [3-1:0]	tmr_cfg;
-	wire [1-1:0]	pwm0_inv;
-	wire [1-1:0]	pwm1_inv;
 	wire [12-1:0]	pwm0_cfg;
 	wire [12-1:0]	pwm1_cfg;
+	wire [1-1:0]	pwm0_inv;
+	wire [1-1:0]	pwm1_inv;
 	wire [8-1:0]	pwm_dt;
 	wire [16-1:0]	pwm_fault_clr;
 	wire [1-1:0]	pwm_dt_en;
@@ -98,7 +98,7 @@ module EF_TMR32_AHBL#(
 	assign	cmpy = CMPY_REG;
 	`AHBL_REG(CMPY_REG, 0, 32)
 
-	reg [5-1:0]	CTRL_REG;
+	reg [7-1:0]	CTRL_REG;
 	assign	tmr_en	=	CTRL_REG[0 : 0];
 	assign	tmr_start	=	CTRL_REG[1 : 1];
 	assign	pwm0_en	=	CTRL_REG[2 : 2];
@@ -106,7 +106,7 @@ module EF_TMR32_AHBL#(
 	assign	pwm_dt_en	=	CTRL_REG[4 : 4];
 	assign	pwm0_inv	=	CTRL_REG[5 : 5];
 	assign	pwm1_inv	=	CTRL_REG[6 : 6];
-	`AHBL_REG(CTRL_REG, 0, 5)
+	`AHBL_REG(CTRL_REG, 0, 7)
 
 	reg [3-1:0]	CFG_REG;
 	assign	tmr_cfg = CFG_REG;
@@ -166,10 +166,10 @@ module EF_TMR32_AHBL#(
 		.cmpy(cmpy),
 		.prescaler(prescaler),
 		.tmr_cfg(tmr_cfg),
-		.pwm0_inv(pwm0_inv),
-		.pwm1_inv(pwm1_inv),
 		.pwm0_cfg(pwm0_cfg),
 		.pwm1_cfg(pwm1_cfg),
+		.pwm0_inv(pwm0_inv),
+		.pwm1_inv(pwm1_inv),
 		.pwm_dt(pwm_dt),
 		.pwm_fault_clr(pwm_fault_clr),
 		.pwm_dt_en(pwm_dt_en),
