@@ -1,13 +1,13 @@
 from uvm.seq import UVMSequence
 from uvm.macros.uvm_object_defines import uvm_object_utils
 from uvm.macros.uvm_message_defines import uvm_fatal
-from EF_UVM.wrapper_env.wrapper_item import wrapper_bus_item
+from EF_UVM.bus_env.bus_item import bus_bus_item
 from uvm.base.uvm_config_db import UVMConfigDb
 from cocotb.triggers import Timer
 from uvm.macros.uvm_sequence_defines import uvm_do_with, uvm_do
 import random
 from tmr32_seq_lib.timer_config import timer_config
-from EF_UVM.wrapper_env.wrapper_seq_lib.reset_seq import reset_seq
+from EF_UVM.bus_env.bus_seq_lib.reset_seq import reset_seq
 
 
 class pwm_actions_seq(timer_config):

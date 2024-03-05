@@ -6,7 +6,7 @@ from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.tlm1.uvm_analysis_port import UVMAnalysisExport
 from EF_UVM.vip.vip import VIP
-from EF_UVM.wrapper_env.wrapper_item import wrapper_bus_item
+from EF_UVM.bus_env.bus_item import bus_bus_item
 from tmr32_item.tmr32_item import tmr32_pwm_item
 from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
 from cocotb.triggers import Timer, ClockCycles, FallingEdge, Event, RisingEdge, Combine, First
@@ -22,7 +22,7 @@ class tmr32_VIP(VIP):
     def build_phase(self, phase):
         super().build_phase(phase)
         arr = []
-        if (not UVMConfigDb.get(self, "", "wrapper_regs", arr)):
+        if (not UVMConfigDb.get(self, "", "bus_regs", arr)):
             uvm_fatal(self.tag, "No json file wrapper regs")
         else:
             self.regs = arr[0]
@@ -42,26 +42,26 @@ class tmr32_VIP(VIP):
     def write_bus(self, tr):
         uvm_info(self.tag, "Vip write: " + tr.convert2string(), UVM_HIGH)
         if tr.reset:
-            self.wrapper_bus_export.write(tr)
+            self.bus_bus_export.write(tr)
             uvm_info("vip", "reset from the vip", UVM_LOW)
             self.regs.write_reg_value("CTRL", 0, force_write=True)
             return
-        if tr.kind == wrapper_bus_item.WRITE:
+        if tr.kind == bus_bus_item.WRITE:
             self.bus_write_event.set()
             self.regs.write_reg_value(tr.addr, tr.data)
-            self.wrapper_bus_export.write(tr)
-        elif tr.kind == wrapper_bus_item.READ:
+            self.bus_bus_export.write(tr)
+        elif tr.kind == bus_bus_item.READ:
             if tr.addr == self.regs.reg_name_to_address["TMR"] and not self._timer_first_flag:
                 # calibrate the timer
                 self._timer_first_flag = True
                 self.regs.write_reg_value("TMR", tr.data, force_write=True)
-                self.wrapper_bus_export.write(tr)
+                self.bus_bus_export.write(tr)
                 self.event_calibrate_tmr.set()
             else:
                 data = self.regs.read_reg_value(tr.addr)
                 td = tr.do_clone()
                 td.data = data
-                self.wrapper_bus_export.write(td)
+                self.bus_bus_export.write(td)
         self.bus_write_event.clear()
 
     def write_ip(self, tr):

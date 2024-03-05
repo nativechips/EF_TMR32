@@ -9,15 +9,15 @@ from uvm.base.uvm_object_globals import UVM_FULL, UVM_LOW, UVM_ERROR
 from uvm.base.uvm_globals import run_test
 from EF_UVM.top_env import top_env
 from tmr32_interface.tmr32_if import tmr32_if
-from EF_UVM.wrapper_env.wrapper_interface.wrapper_if import wrapper_ahb_if, wrapper_apb_if, wrapper_wb_if, wrapper_irq_if
+from EF_UVM.bus_env.bus_interface.bus_if import bus_ahb_if, bus_apb_if, bus_wb_if, bus_irq_if
 from cocotb_coverage.coverage import coverage_db
 from cocotb.triggers import Event, First
-from EF_UVM.wrapper_env.wrapper_regs import wrapper_regs
+from EF_UVM.bus_env.bus_regs import bus_regs
 from uvm.base.uvm_report_server import UVMReportServer
 from uvm.base import UVMRoot
 
 # seq
-from EF_UVM.wrapper_env.wrapper_seq_lib.write_read_regs import write_read_regs
+from EF_UVM.bus_env.bus_seq_lib.write_read_regs import write_read_regs
 from tmr32_seq_lib.pwm_actions_seq import pwm_actions_seq
 from tmr32_seq_lib.pwm_pr_seq import pwm_pr_seq
 from tmr32_seq_lib.pwm_tmr_seq import pwm_tmr_seq
@@ -36,15 +36,15 @@ from tmr32_coverage.tmr32_coverage import tmr32_coverage
 from EF_UVM.ip_env.ip_logger.ip_logger import ip_logger
 from tmr32_logger.tmr32_logger import tmr32_logger
 from EF_UVM.scoreboard import scoreboard
-from tmr32_coverage.tmr32_wrapper_coverage import tmr32_wrapper_coverage
-from EF_UVM.wrapper_env.wrapper_coverage.wrapper_coverage import wrapper_coverage
+from tmr32_coverage.tmr32_bus_coverage import tmr32_bus_coverage
+from EF_UVM.bus_env.bus_coverage.bus_coverage import bus_coverage
 # 
-from EF_UVM.wrapper_env.wrapper_agent.wrapper_ahb_driver import wrapper_ahb_driver
-from EF_UVM.wrapper_env.wrapper_agent.wrapper_apb_driver import wrapper_apb_driver
-from EF_UVM.wrapper_env.wrapper_agent.wrapper_wb_driver import wrapper_wb_driver
-from EF_UVM.wrapper_env.wrapper_agent.wrapper_ahb_monitor import wrapper_ahb_monitor
-from EF_UVM.wrapper_env.wrapper_agent.wrapper_apb_monitor import wrapper_apb_monitor
-from EF_UVM.wrapper_env.wrapper_agent.wrapper_wb_monitor import wrapper_wb_monitor
+from EF_UVM.bus_env.bus_agent.bus_ahb_driver import bus_ahb_driver
+from EF_UVM.bus_env.bus_agent.bus_apb_driver import bus_apb_driver
+from EF_UVM.bus_env.bus_agent.bus_wb_driver import bus_wb_driver
+from EF_UVM.bus_env.bus_agent.bus_ahb_monitor import bus_ahb_monitor
+from EF_UVM.bus_env.bus_agent.bus_apb_monitor import bus_apb_monitor
+from EF_UVM.bus_env.bus_agent.bus_wb_monitor import bus_wb_monitor
 
 
 @cocotb.test()
@@ -55,22 +55,22 @@ async def module_top(dut):
     pif = tmr32_if(dut)
     BUS_TYPE = cocotb.plusargs['BUS_TYPE']
     if BUS_TYPE == "APB":
-        w_if = wrapper_apb_if(dut)
+        w_if = bus_apb_if(dut)
     elif BUS_TYPE == "AHB":
-        w_if = wrapper_ahb_if(dut)
+        w_if = bus_ahb_if(dut)
     elif BUS_TYPE == "WISHBONE":
-        w_if = wrapper_wb_if(dut)
+        w_if = bus_wb_if(dut)
     else:
         uvm_fatal("module_top", f"unknown bus type {BUS_TYPE}")
-    w_irq_if = wrapper_irq_if(dut)
+    w_irq_if = bus_irq_if(dut)
     UVMConfigDb.set(None, "*", "ip_if", pif)
-    UVMConfigDb.set(None, "*", "wrapper_if", w_if)
-    UVMConfigDb.set(None, "*", "wrapper_irq_if", w_irq_if)
+    UVMConfigDb.set(None, "*", "bus_if", w_if)
+    UVMConfigDb.set(None, "*", "bus_irq_if", w_irq_if)
     yaml_file = []
     UVMRoot().clp.get_arg_values("+YAML_FILE=", yaml_file)
     yaml_file = yaml_file[0]
-    regs = wrapper_regs(yaml_file)
-    UVMConfigDb.set(None, "*", "wrapper_regs", regs)
+    regs = bus_regs(yaml_file)
+    UVMConfigDb.set(None, "*", "bus_regs", regs)
     UVMConfigDb.set(None, "*", "irq_exist", regs.get_irq_exist())
     UVMConfigDb.set(None, "*", "insert_glitches", False)
     UVMConfigDb.set(None, "*", "collect_coverage", True)
@@ -94,7 +94,7 @@ class base_test(UVMTest):
         self.printer = None
 
     def build_phase(self, phase):
-        # UVMConfigDb.set(self, "example_tb0.wrapper_env.wrapper_agent.wrapper_sequencer.run_phase", "default_sequence", write_seq.type_id.get())
+        # UVMConfigDb.set(self, "example_tb0.bus_env.bus_agent.bus_sequencer.run_phase", "default_sequence", write_seq.type_id.get())
         super().build_phase(phase)
         # override 
         self.set_type_override_by_type(ip_driver.get_type(), tmr32_driver.get_type())
@@ -102,14 +102,14 @@ class base_test(UVMTest):
         self.set_type_override_by_type(VIP.get_type(), tmr32_VIP.get_type())
         self.set_type_override_by_type(ip_coverage.get_type(), tmr32_coverage.get_type())
         self.set_type_override_by_type(ip_logger.get_type(), tmr32_logger.get_type())
-        self.set_type_override_by_type(wrapper_coverage.get_type(), tmr32_wrapper_coverage.get_type())
+        self.set_type_override_by_type(bus_coverage.get_type(), tmr32_bus_coverage.get_type())
         BUS_TYPE = cocotb.plusargs['BUS_TYPE']
         if BUS_TYPE == "AHB":
-            self.set_type_override_by_type(wrapper_apb_driver.get_type(), wrapper_ahb_driver.get_type())
-            self.set_type_override_by_type(wrapper_apb_monitor.get_type(), wrapper_ahb_monitor.get_type())
+            self.set_type_override_by_type(bus_apb_driver.get_type(), bus_ahb_driver.get_type())
+            self.set_type_override_by_type(bus_apb_monitor.get_type(), bus_ahb_monitor.get_type())
         elif BUS_TYPE == "WISHBONE":
-            self.set_type_override_by_type(wrapper_apb_driver.get_type(), wrapper_wb_driver.get_type())
-            self.set_type_override_by_type(wrapper_apb_monitor.get_type(), wrapper_wb_monitor.get_type())
+            self.set_type_override_by_type(bus_apb_driver.get_type(), bus_wb_driver.get_type())
+            self.set_type_override_by_type(bus_apb_monitor.get_type(), bus_wb_monitor.get_type())
         # self.set_type_override_by_type(scoreboard.get_type(), tmr32_scoreboard.get_type())
         # Enable transaction recording for everything
         UVMConfigDb.set(self, "*", "recording_detail", UVM_FULL)
@@ -125,10 +125,10 @@ class base_test(UVMTest):
         else:
             uvm_fatal("NOVIF", "Could not get ip_if from config DB")
 
-        if UVMConfigDb.get(None, "*", "wrapper_if", arr) is True:
-            UVMConfigDb.set(self, "*", "wrapper_if", arr[0])
+        if UVMConfigDb.get(None, "*", "bus_if", arr) is True:
+            UVMConfigDb.set(self, "*", "bus_if", arr[0])
         else:
-            uvm_fatal("NOVIF", "Could not get wrapper_bus_if from config DB")
+            uvm_fatal("NOVIF", "Could not get bus_bus_if from config DB")
         # set max number of uvm errors
         server = UVMReportServer()
         server.set_max_quit_count(5)
@@ -140,7 +140,7 @@ class base_test(UVMTest):
         uvm_info(self.get_type_name(), sv.sformatf("Printing the test topology :\n%s", self.sprint(self.printer)), UVM_LOW)
 
     def start_of_simulation_phase(self, phase):
-        self.wrapper_sqr = self.example_tb0.wrapper_env.wrapper_agent.wrapper_sequencer
+        self.bus_sqr = self.example_tb0.bus_env.bus_agent.bus_sequencer
         self.ip_sqr = self.example_tb0.ip_env.ip_agent.ip_sequencer
 
     async def run_phase(self, phase):
@@ -173,8 +173,8 @@ class pwm_actions_test(base_test):
     async def run_phase(self, phase):
         uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
         phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
-        wrapper_seq = pwm_actions_seq("pwm_actions_seq")
-        await wrapper_seq.start(self.wrapper_sqr)
+        bus_seq = pwm_actions_seq("pwm_actions_seq")
+        await bus_seq.start(self.bus_sqr)
         phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
 
 
@@ -189,8 +189,8 @@ class pwm_pr_test(base_test):
     async def run_phase(self, phase):
         uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
         phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
-        wrapper_seq = pwm_pr_seq("pwm_pr_seq")
-        await wrapper_seq.start(self.wrapper_sqr)
+        bus_seq = pwm_pr_seq("pwm_pr_seq")
+        await bus_seq.start(self.bus_sqr)
         phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
 
 
@@ -205,8 +205,8 @@ class pwm_tmr_test(base_test):
     async def run_phase(self, phase):
         uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
         phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
-        wrapper_seq = pwm_tmr_seq("pwm_tmr_seq")
-        await wrapper_seq.start(self.wrapper_sqr)
+        bus_seq = pwm_tmr_seq("pwm_tmr_seq")
+        await bus_seq.start(self.bus_sqr)
         phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
 
 
@@ -221,8 +221,8 @@ class time_vary_test(base_test):
     async def run_phase(self, phase):
         uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
         phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
-        wrapper_seq = timer_vary("timer_vary")
-        await wrapper_seq.start(self.wrapper_sqr)
+        bus_seq = timer_vary("timer_vary")
+        await bus_seq.start(self.bus_sqr)
         phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
 
 
@@ -236,8 +236,8 @@ class temp_test(base_test):
     async def run_phase(self, phase):
         uvm_info(self.tag, f"Starting test {self.__class__.__name__}", UVM_LOW)
         phase.raise_objection(self, f"{self.__class__.__name__} OBJECTED")
-        wrapper_seq = temp("timer_vary")
-        await wrapper_seq.start(self.wrapper_sqr)
+        bus_seq = temp("timer_vary")
+        await bus_seq.start(self.bus_sqr)
         phase.drop_objection(self, f"{self.__class__.__name__} drop objection")
 
 
