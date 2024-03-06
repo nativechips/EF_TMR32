@@ -6,8 +6,8 @@
       "owner": "Efabless Corp.",
       "license": "APACHE 2.0",
       "author": "Mohamed Shalan",
-      "email": "mshalan@aucegypt.edu",
-      "version": 1,
+      "email": "mshalan@efabless.com",
+      "version": "v1.0.0",
       "date": "12-01-2024",
       "category": "digital",
       "tags": [
@@ -21,15 +21,15 @@
       "bus": [
         "generic"
       ],
-      "type\"": "soft",
+      "type": "soft",
       "status": "n/a",
       "qualification": "n/a",
       "cell_count": [
         1500,
         2000
       ],
-      "width\"": 0,
-      "height\"": 0,
+      "width": 0,
+      "height": 0,
       "technology": "n/a",
       "clock_freq_mhz": 50,
       "digital_supply_voltage": "n/a",
