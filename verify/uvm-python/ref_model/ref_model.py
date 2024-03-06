@@ -5,7 +5,7 @@ from uvm.base.uvm_object_globals import UVM_HIGH, UVM_LOW, UVM_MEDIUM
 from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.tlm1.uvm_analysis_port import UVMAnalysisExport
-from EF_UVM.vip.vip import VIP
+from EF_UVM.ref_model.ref_model import ref_model
 from EF_UVM.bus_env.bus_item import bus_bus_item
 from tmr32_item.tmr32_item import tmr32_pwm_item
 from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
@@ -13,7 +13,7 @@ from cocotb.triggers import Timer, ClockCycles, FallingEdge, Event, RisingEdge, 
 import cocotb
 
 
-class tmr32_VIP(VIP):
+class tmr32_VIP(ref_model):
     def __init__(self, name="tmr32_VIP", parent=None):
         super().__init__(name, parent)
         self._timer_first_flag = False

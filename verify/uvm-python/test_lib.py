@@ -29,8 +29,8 @@ from EF_UVM.ip_env.ip_agent.ip_driver import ip_driver
 from tmr32_agent.tmr32_driver import tmr32_driver
 from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
 from tmr32_agent.tmr32_monitor import tmr32_monitor
-from EF_UVM.vip.vip import VIP
-from vip.vip import tmr32_VIP
+from EF_UVM.ref_model.ref_model import ref_model
+from ref_model.ref_model import tmr32_VIP
 from EF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
 from tmr32_coverage.tmr32_coverage import tmr32_coverage
 from EF_UVM.ip_env.ip_logger.ip_logger import ip_logger
@@ -99,7 +99,7 @@ class base_test(UVMTest):
         # override 
         self.set_type_override_by_type(ip_driver.get_type(), tmr32_driver.get_type())
         self.set_type_override_by_type(ip_monitor.get_type(), tmr32_monitor.get_type())
-        self.set_type_override_by_type(VIP.get_type(), tmr32_VIP.get_type())
+        self.set_type_override_by_type(ref_model.get_type(), tmr32_VIP.get_type())
         self.set_type_override_by_type(ip_coverage.get_type(), tmr32_coverage.get_type())
         self.set_type_override_by_type(ip_logger.get_type(), tmr32_logger.get_type())
         self.set_type_override_by_type(bus_coverage.get_type(), tmr32_bus_coverage.get_type())
