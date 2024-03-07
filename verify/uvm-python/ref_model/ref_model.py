@@ -6,7 +6,7 @@ from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.tlm1.uvm_analysis_port import UVMAnalysisExport
 from EF_UVM.ref_model.ref_model import ref_model
-from EF_UVM.bus_env.bus_item import bus_bus_item
+from EF_UVM.bus_env.bus_item import bus_item
 from tmr32_item.tmr32_item import tmr32_pwm_item
 from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
 from cocotb.triggers import Timer, ClockCycles, FallingEdge, Event, RisingEdge, Combine, First
@@ -46,11 +46,11 @@ class tmr32_VIP(ref_model):
             uvm_info("vip", "reset from the vip", UVM_LOW)
             self.regs.write_reg_value("CTRL", 0, force_write=True)
             return
-        if tr.kind == bus_bus_item.WRITE:
+        if tr.kind == bus_item.WRITE:
             self.bus_write_event.set()
             self.regs.write_reg_value(tr.addr, tr.data)
             self.bus_bus_export.write(tr)
-        elif tr.kind == bus_bus_item.READ:
+        elif tr.kind == bus_item.READ:
             if tr.addr == self.regs.reg_name_to_address["TMR"] and not self._timer_first_flag:
                 # calibrate the timer
                 self._timer_first_flag = True

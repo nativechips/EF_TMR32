@@ -7,7 +7,7 @@ from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.macros.uvm_tlm_defines import uvm_analysis_imp_decl
 from EF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
 from EF_UVM.bus_env.bus_coverage.bus_coverage import bus_coverage
-from EF_UVM.bus_env.bus_item import bus_bus_item
+from EF_UVM.bus_env.bus_item import bus_item
 from cocotb_coverage.coverage import CoverPoint, CoverCross
 
 
@@ -24,7 +24,7 @@ class tmr32_bus_coverage(bus_coverage):
 
     def write_bus(self, tr):
         super().write_bus(tr)
-        if tr.kind == bus_bus_item.READ and tr.addr == 0x00: # read from tmr val 
+        if tr.kind == bus_item.READ and tr.addr == 0x00: # read from tmr val 
             self.timer_cov_groups.sample_timer(tr)
 
 uvm_component_utils(tmr32_bus_coverage)
