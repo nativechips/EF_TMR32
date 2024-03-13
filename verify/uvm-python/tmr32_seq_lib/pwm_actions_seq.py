@@ -7,8 +7,6 @@ from cocotb.triggers import Timer
 from uvm.macros.uvm_sequence_defines import uvm_do_with, uvm_do
 import random
 from tmr32_seq_lib.timer_config import timer_config
-from EF_UVM.bus_env.bus_seq_lib.reset_seq import reset_seq
-
 
 class pwm_actions_seq(timer_config):
 
@@ -20,11 +18,11 @@ class pwm_actions_seq(timer_config):
         await super().body()
         await self.pwm0_seq()
         await self.pwm_delay()
-        await uvm_do(self, reset_seq())
+        await self.send_reset()
         await self.pwm1_seq()
         await self.pwm_delay()
         for _ in range(10):
-            await uvm_do(self, reset_seq())
+            await self.send_reset()
             await self.pwm_seq()
             await self.pwm_delay()
 

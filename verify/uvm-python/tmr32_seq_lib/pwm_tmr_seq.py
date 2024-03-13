@@ -7,7 +7,6 @@ from cocotb.triggers import Timer
 from uvm.macros.uvm_sequence_defines import uvm_do_with, uvm_do
 import random
 from tmr32_seq_lib.timer_config import timer_config
-from EF_UVM.bus_env.bus_seq_lib.reset_seq import reset_seq
 from cocotb_coverage.coverage import coverage_db
 from uvm.base.uvm_object_globals import UVM_FULL, UVM_LOW, UVM_ERROR
 from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
@@ -25,7 +24,7 @@ class pwm_tmr_seq(timer_config):
             if len(reload_vals) == 0:
                 break
             for reload_val in reload_vals:
-                await uvm_do(self, reset_seq())
+                await self.send_reset()
                 await self.pwm_seq(reload_val)
                 await self.pwm_delay(relaod_large_val=reload_val)
 

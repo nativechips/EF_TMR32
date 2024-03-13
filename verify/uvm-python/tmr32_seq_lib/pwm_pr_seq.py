@@ -7,7 +7,6 @@ from cocotb.triggers import Timer
 from uvm.macros.uvm_sequence_defines import uvm_do_with, uvm_do
 import random
 from tmr32_seq_lib.timer_config import timer_config
-from EF_UVM.bus_env.bus_seq_lib.reset_seq import reset_seq
 from cocotb_coverage.coverage import coverage_db
 from uvm.base.uvm_object_globals import UVM_FULL, UVM_LOW, UVM_ERROR
 from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
@@ -26,7 +25,7 @@ class pwm_pr_seq(timer_config):
             if len(pr_ranges) == 0:
                 break
             for pr_range in pr_ranges:
-                await uvm_do(self, reset_seq())
+                await self.send_reset()
                 await self.pwm_seq(pr_range)
                 await self.pwm_delay(largest_pr=pr_range[1])
 

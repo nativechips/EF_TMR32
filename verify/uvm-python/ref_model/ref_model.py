@@ -41,7 +41,7 @@ class tmr32_VIP(ref_model):
 
     def write_bus(self, tr):
         uvm_info(self.tag, "Vip write: " + tr.convert2string(), UVM_HIGH)
-        if tr.reset:
+        if tr.kind == bus_item.RESET:
             self.bus_bus_export.write(tr)
             uvm_info("vip", "reset from the vip", UVM_LOW)
             self.regs.write_reg_value("CTRL", 0, force_write=True)
