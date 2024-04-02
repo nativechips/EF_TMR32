@@ -1,7 +1,7 @@
 /*
 	Copyright 2024 Efabless Corp.
 
-	Author: Mohamed Shalan (mshalan@aucegypt.edu)
+	Author: Mohamed Shalan (mshalan@efabless.com)
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -21,64 +21,6 @@
 
 `timescale			1ns/1ps
 `default_nettype	none
-
-
-
-/*
-	Copyright 2020 AUCOHL
-
-    Author: Mohamed Shalan (mshalan@aucegypt.edu)
-	
-	Licensed under the Apache License, Version 2.0 (the "License"); 
-	you may not use this file except in compliance with the License. 
-	You may obtain a copy of the License at:
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software 
-	distributed under the License is distributed on an "AS IS" BASIS, 
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-	See the License for the specific language governing permissions and 
-	limitations under the License.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module EF_TMR32_AHBL#( 
 	parameter	
@@ -111,6 +53,7 @@ module EF_TMR32_AHBL#(
 	localparam	PWM0CFG_REG_OFFSET = 16'd28;
 	localparam	PWM1CFG_REG_OFFSET = 16'd32;
 	localparam	PWMDT_REG_OFFSET = 16'd36;
+	localparam	PWMFC_REG_OFFSET = 16'd40;
 	localparam	IM_REG_OFFSET = 16'd3840;
 	localparam	MIS_REG_OFFSET = 16'd3844;
 	localparam	RIS_REG_OFFSET = 16'd3848;
@@ -152,7 +95,7 @@ module EF_TMR32_AHBL#(
 	wire [32-1:0]	tmr;
 	wire [1-1:0]	matchx_flag;
 	wire [1-1:0]	matchy_flag;
-	(*keep*) wire [1-1:0]	timeout_flag;
+	wire [1-1:0]	timeout_flag;
 
 
 	wire [32-1:0]	TMR_WIRE;
@@ -217,6 +160,12 @@ module EF_TMR32_AHBL#(
 	always @(posedge HCLK or negedge HRESETn) if(~HRESETn) PWMDT_REG <= 0;
                                         else if(ahbl_we & (last_HADDR[16-1:0]==PWMDT_REG_OFFSET))
                                             PWMDT_REG <= HWDATA[8-1:0];
+
+	reg [16-1:0]	PWMFC_REG;
+	assign	pwm_fault_clr = PWMFC_REG;
+	always @(posedge HCLK or negedge HRESETn) if(~HRESETn) PWMFC_REG <= 0;
+                                        else if(ahbl_we & (last_HADDR[16-1:0]==PWMFC_REG_OFFSET))
+                                            PWMFC_REG <= HWDATA[16-1:0];
 
 	reg [2:0] IM_REG;
 	reg [2:0] IC_REG;
@@ -292,6 +241,7 @@ module EF_TMR32_AHBL#(
 			(last_HADDR[16-1:0] == PWM0CFG_REG_OFFSET)	? PWM0CFG_REG :
 			(last_HADDR[16-1:0] == PWM1CFG_REG_OFFSET)	? PWM1CFG_REG :
 			(last_HADDR[16-1:0] == PWMDT_REG_OFFSET)	? PWMDT_REG :
+			(last_HADDR[16-1:0] == PWMFC_REG_OFFSET)	? PWMFC_REG :
 			(last_HADDR[16-1:0] == IM_REG_OFFSET)	? IM_REG :
 			(last_HADDR[16-1:0] == MIS_REG_OFFSET)	? MIS_REG :
 			(last_HADDR[16-1:0] == RIS_REG_OFFSET)	? RIS_REG :
