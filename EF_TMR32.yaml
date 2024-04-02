@@ -337,6 +337,14 @@ registers:
   bit_access: no
   write_port: pwm_dt
   description: PWM deadtime Register.
+- name: PWMFC
+  size: 16
+  mode: w
+  fifo: no
+  offset: 40
+  bit_access: no
+  write_port: pwm_fault_clr
+  description: PWM fault clear register.
 
 flags:
 - name: TO
