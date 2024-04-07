@@ -39,12 +39,16 @@ A 32-bit timer and PWM generator with the following features:
   status: n/a
   qualification: n/a
   cell_count: 
-    - 1500
-    - 2000
+    - IP: 797
+    - APB: 1435
+    - AHBL: 1501
   width": 0.0
   height": 0.0
   technology: n/a
-  clock_freq_mhz: 50
+  clock_freq_mhz:
+    - IP: 163
+    - APB: 135
+    - AHBL: 128
   digital_supply_voltage: n/a
   analog_supply_voltage: n/a
 
