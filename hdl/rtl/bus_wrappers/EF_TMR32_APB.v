@@ -1,7 +1,7 @@
 /*
-	Copyright 2024 Efabless
+	Copyright 2024 Efabless Corp.
 
-	Author: Mohamed Shalan (mshalan@aucegypt.edu)
+	Author: Mohamed Shalan (mshalan@efabless.com)
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ module EF_TMR32_APB#(
 	localparam	PWM0CFG_REG_OFFSET = `APB_AW'd28;
 	localparam	PWM1CFG_REG_OFFSET = `APB_AW'd32;
 	localparam	PWMDT_REG_OFFSET = `APB_AW'd36;
+	localparam	PWMFC_REG_OFFSET = `APB_AW'd40;
 	localparam	IM_REG_OFFSET = `APB_AW'd3840;
 	localparam	MIS_REG_OFFSET = `APB_AW'd3844;
 	localparam	RIS_REG_OFFSET = `APB_AW'd3848;
@@ -124,6 +125,10 @@ module EF_TMR32_APB#(
 	assign	pwm_dt = PWMDT_REG;
 	`APB_REG(PWMDT_REG, 0, 8)
 
+	reg [16-1:0]	PWMFC_REG;
+	assign	pwm_fault_clr = PWMFC_REG;
+	`APB_REG(PWMFC_REG, 0, 16)
+
 	reg [2:0] IM_REG;
 	reg [2:0] IC_REG;
 	reg [2:0] RIS_REG;
@@ -193,6 +198,7 @@ module EF_TMR32_APB#(
 			(PADDR[`APB_AW-1:0] == PWM0CFG_REG_OFFSET)	? PWM0CFG_REG :
 			(PADDR[`APB_AW-1:0] == PWM1CFG_REG_OFFSET)	? PWM1CFG_REG :
 			(PADDR[`APB_AW-1:0] == PWMDT_REG_OFFSET)	? PWMDT_REG :
+			(PADDR[`APB_AW-1:0] == PWMFC_REG_OFFSET)	? PWMFC_REG :
 			(PADDR[`APB_AW-1:0] == IM_REG_OFFSET)	? IM_REG :
 			(PADDR[`APB_AW-1:0] == MIS_REG_OFFSET)	? MIS_REG :
 			(PADDR[`APB_AW-1:0] == RIS_REG_OFFSET)	? RIS_REG :

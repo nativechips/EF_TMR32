@@ -1,7 +1,7 @@
 /*
-	Copyright 2024 Efabless
+	Copyright 2024 Efabless Corp.
 
-	Author: Mohamed Shalan (mshalan@aucegypt.edu)
+	Author: Mohamed Shalan (mshalan@efabless.com)
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ module EF_TMR32_AHBL#(
 	localparam	PWM0CFG_REG_OFFSET = `AHBL_AW'd28;
 	localparam	PWM1CFG_REG_OFFSET = `AHBL_AW'd32;
 	localparam	PWMDT_REG_OFFSET = `AHBL_AW'd36;
+	localparam	PWMFC_REG_OFFSET = `AHBL_AW'd40;
 	localparam	IM_REG_OFFSET = `AHBL_AW'd3840;
 	localparam	MIS_REG_OFFSET = `AHBL_AW'd3844;
 	localparam	RIS_REG_OFFSET = `AHBL_AW'd3848;
@@ -66,10 +67,10 @@ module EF_TMR32_AHBL#(
 	wire [32-1:0]	cmpy;
 	wire [PRW-1:0]	prescaler;
 	wire [3-1:0]	tmr_cfg;
-	wire [1-1:0]	pwm0_inv;
-	wire [1-1:0]	pwm1_inv;
 	wire [12-1:0]	pwm0_cfg;
 	wire [12-1:0]	pwm1_cfg;
+	wire [1-1:0]	pwm0_inv;
+	wire [1-1:0]	pwm1_inv;
 	wire [8-1:0]	pwm_dt;
 	wire [16-1:0]	pwm_fault_clr;
 	wire [1-1:0]	pwm_dt_en;
@@ -98,7 +99,7 @@ module EF_TMR32_AHBL#(
 	assign	cmpy = CMPY_REG;
 	`AHBL_REG(CMPY_REG, 0, 32)
 
-	reg [5-1:0]	CTRL_REG;
+	reg [7-1:0]	CTRL_REG;
 	assign	tmr_en	=	CTRL_REG[0 : 0];
 	assign	tmr_start	=	CTRL_REG[1 : 1];
 	assign	pwm0_en	=	CTRL_REG[2 : 2];
@@ -106,7 +107,7 @@ module EF_TMR32_AHBL#(
 	assign	pwm_dt_en	=	CTRL_REG[4 : 4];
 	assign	pwm0_inv	=	CTRL_REG[5 : 5];
 	assign	pwm1_inv	=	CTRL_REG[6 : 6];
-	`AHBL_REG(CTRL_REG, 0, 5)
+	`AHBL_REG(CTRL_REG, 0, 7)
 
 	reg [3-1:0]	CFG_REG;
 	assign	tmr_cfg = CFG_REG;
@@ -123,6 +124,10 @@ module EF_TMR32_AHBL#(
 	reg [8-1:0]	PWMDT_REG;
 	assign	pwm_dt = PWMDT_REG;
 	`AHBL_REG(PWMDT_REG, 0, 8)
+
+	reg [16-1:0]	PWMFC_REG;
+	assign	pwm_fault_clr = PWMFC_REG;
+	`AHBL_REG(PWMFC_REG, 0, 16)
 
 	reg [2:0] IM_REG;
 	reg [2:0] IC_REG;
@@ -166,10 +171,10 @@ module EF_TMR32_AHBL#(
 		.cmpy(cmpy),
 		.prescaler(prescaler),
 		.tmr_cfg(tmr_cfg),
-		.pwm0_inv(pwm0_inv),
-		.pwm1_inv(pwm1_inv),
 		.pwm0_cfg(pwm0_cfg),
 		.pwm1_cfg(pwm1_cfg),
+		.pwm0_inv(pwm0_inv),
+		.pwm1_inv(pwm1_inv),
 		.pwm_dt(pwm_dt),
 		.pwm_fault_clr(pwm_fault_clr),
 		.pwm_dt_en(pwm_dt_en),
@@ -193,6 +198,7 @@ module EF_TMR32_AHBL#(
 			(last_HADDR[`AHBL_AW-1:0] == PWM0CFG_REG_OFFSET)	? PWM0CFG_REG :
 			(last_HADDR[`AHBL_AW-1:0] == PWM1CFG_REG_OFFSET)	? PWM1CFG_REG :
 			(last_HADDR[`AHBL_AW-1:0] == PWMDT_REG_OFFSET)	? PWMDT_REG :
+			(last_HADDR[`AHBL_AW-1:0] == PWMFC_REG_OFFSET)	? PWMFC_REG :
 			(last_HADDR[`AHBL_AW-1:0] == IM_REG_OFFSET)	? IM_REG :
 			(last_HADDR[`AHBL_AW-1:0] == MIS_REG_OFFSET)	? MIS_REG :
 			(last_HADDR[`AHBL_AW-1:0] == RIS_REG_OFFSET)	? RIS_REG :
