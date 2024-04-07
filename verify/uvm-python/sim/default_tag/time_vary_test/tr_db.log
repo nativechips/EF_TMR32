@@ -1,5 +1,0 @@
-  CREATE_STREAM @0.0 [NAME:timer_vary T:Transactions SCOPE:uvm_test_top.example_tb0.bus_env.bus_agent.bus_sequencer STREAM:1099]
-  CREATE_STREAM @0.0 [NAME:timer_vary T: SCOPE:uvm_test_top.example_tb0.bus_env.bus_agent.bus_sequencer STREAM:1101]
-    OPEN_RECORDER @0.0 {TXH:1103 STREAM:1101 NAME:timer_vary TIME:0.0 TYPE="Begin_No_Parent, Link"}
-    CLOSE_RECORDER @250146.0 {TXH:1103 TIME=250146.0}
-    FREE_RECORDER @250146.0 {TXH:1103}
