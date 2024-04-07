@@ -1,0 +1,5 @@
+`verilator_config
+lint_off -rule DECLFILENAME
+lint_off -rule EOFNEWLINE
+lint_off -rule UNDRIVEN -file "/home/nouran/EF_TMR32/verify/uvm-python/sim/default_tag/openlane_run/tmp/7b395cf8ef99439a8906397e87c650e0.bb.v"
+lint_off -rule UNUSEDSIGNAL -file "/home/nouran/EF_TMR32/verify/uvm-python/sim/default_tag/openlane_run/tmp/7b395cf8ef99439a8906397e87c650e0.bb.v"

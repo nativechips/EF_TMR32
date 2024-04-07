@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1712444445" />
+    <testcase name="module_top" classname="test_lib" file="/home/nouran/EF_TMR32/verify/uvm-python/test_lib.py" lineno="50" time="27.476124048233032" sim_time_ns="250146.001" ratio_time="9104.12256695597" />
+  </testsuite>
+</testsuites>
