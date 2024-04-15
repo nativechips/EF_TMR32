@@ -1,5 +1,4 @@
 `include "aucohl_rtl.vh"
-`include "aucohl_lib.v"
 
 
 module EF_TMR32 #(parameter PRW = 16,

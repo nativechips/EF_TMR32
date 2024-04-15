@@ -1,21 +1,25 @@
-IP = EF_TMR32
-RTL_PATH = ../../hdl/rtl
-WRAPPER_PATH = $(RTL_PATH)/bus_wrappers
-SOURCE_APB = $(RTL_PATH)/$(IP).v $(WRAPPER_PATH)/$(IP)_APB.v
-SOURCE_AHBL = $(RTL_PATH)/$(IP).v $(WRAPPER_PATH)/$(IP)_AHBL.v
-TESTBENCH_APB = $(IP)_APB_tb.v
-TESTBENCH_AHBL = $(IP)_AHBL_tb.v
-IP_UTIL_PATH = ../../../IP_Utilities
-AUCOHL_RTL_LIB_PATH = $(IP_UTIL_PATH)/rtl
-AUCOHL_TB_LIB_PATH = $(IP_UTIL_PATH)/verify
-AUCOHL_GEN_LIB_PATH = $(IP_UTIL_PATH)/generators
+SOURCE = ../../hdl/rtl/EF_TMR32.v
+SOURCE_APB =  ../../hdl/rtl/bus_wrappers/EF_TMR32_APB.v
+SOURCE_AHBL = ../../hdl/rtl/bus_wrappers/EF_TMR32_AHBL.v
+SOURCE_WB = ../../hdl/rtl/bus_wrappers/EF_TMR32_WB.v
+TESTBENCH_APB = EF_TMR32_APB_tb.v
+TESTBENCH_AHBL = EF_TMR32_AHBL_tb.v
+TESTBENCH_WB = EF_TMR32_WB_tb.v
+RTL_LIB = ../../../IP_Utilities/rtl/aucohl_lib.v
+AUCOHL_RTL_INCLUDES = ../../../IP_Utilities/rtl/
+RTL_INCLUDE_DIR = ../../../BusWrap/includes/rtl/
+TB_INCLUDE_DIR = ../../../BusWrap/includes/tb/
 
 APB-RTL: 
-	iverilog -o run.vvp -I$(AUCOHL_TB_LIB_PATH) -I$(AUCOHL_RTL_LIB_PATH) -I$(AUCOHL_GEN_LIB_PATH) $(SOURCE_APB) $(TESTBENCH_APB)
+	iverilog -o run.vvp -I$(TB_INCLUDE_DIR) -I$(RTL_INCLUDE_DIR) -I$(AUCOHL_RTL_INCLUDES) $(RTL_LIB)  $(SOURCE) $(SOURCE_APB) $(TESTBENCH_APB)
 	./run.vvp
 
 AHBL-RTL: 
-	iverilog -o run.vvp -I$(AUCOHL_TB_LIB_PATH) -I$(AUCOHL_RTL_LIB_PATH) -I$(AUCOHL_GEN_LIB_PATH) $(SOURCE_AHBL) $(TESTBENCH_AHBL)
+	iverilog -o run.vvp -I$(TB_INCLUDE_DIR) -I$(RTL_INCLUDE_DIR) -I$(AUCOHL_RTL_INCLUDES) $(RTL_LIB)  $(SOURCE) $(SOURCE_AHBL) $(TESTBENCH_AHBL)
+	./run.vvp
+
+WB-RTL: 
+	iverilog -o run.vvp -I$(TB_INCLUDE_DIR) -I$(RTL_INCLUDE_DIR) -I$(AUCOHL_RTL_INCLUDES) $(RTL_LIB)  $(SOURCE) $(SOURCE_WB) $(TESTBENCH_WB)
 	./run.vvp
 
 clean:
