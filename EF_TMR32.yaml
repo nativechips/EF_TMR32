@@ -24,7 +24,7 @@ A 32-bit timer and PWM generator with the following features:
   author: Mohamed Shalan
   email: mshalan@efabless.com
   version: v1.0.0
-  date: 12-01-2024
+  date: 15-04-2024
   category: digital
   tags:
     - timer
