@@ -30,6 +30,16 @@ module top();
         wire 		HREADY;
         EF_TMR32_AHBL uut(.pwm0(pwm0), .pwm1(pwm1), .pwm_fault(pwm_fault), .HCLK(CLK), .HRESETn(RESETn), .HADDR(HADDR), .HWRITE(HWRITE), .HSEL(HSEL), .HTRANS(HTRANS), .HWDATA(HWDATA), .HRDATA(HRDATA), .HREADY(HREADY),.HREADYOUT(HREADYOUT), .IRQ(irq));
     `endif // BUS_TYPE_AHB
+    `ifdef BUS_TYPE_WISHBONE
+        wire [31:0] adr_i;
+        wire [31:0] dat_i;
+        wire [31:0] dat_o;
+        wire [3:0]  sel_i;
+        wire        cyc_i;
+        wire        stb_i;
+        reg         ack_o;
+        EF_TMR32_WB uut(.pwm0(pwm0), .pwm1(pwm1), .pwm_fault(pwm_fault), .clk_i(CLK), .rst_i(~RESETn), .adr_i(adr_i), .dat_i(dat_i), .dat_o(dat_o), .sel_i(sel_i), .cyc_i(cyc_i), .stb_i(stb_i), .ack_o(ack_o),.we_i(we_i), .IRQ(irq));
+    `endif // BUS_TYPE_WISHBONE
 `ifndef SKIP_WAVE_DUMP
 initial begin
     $dumpfile("waves.vcd");
