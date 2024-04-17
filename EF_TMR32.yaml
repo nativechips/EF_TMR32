@@ -42,6 +42,7 @@ A 32-bit timer and PWM generator with the following features:
     - IP: 797
     - APB: 1435
     - AHBL: 1501
+    - WB: 1669
   width": 0.0
   height": 0.0
   technology: n/a
@@ -49,6 +50,7 @@ A 32-bit timer and PWM generator with the following features:
     - IP: 163
     - APB: 135
     - AHBL: 128
+    - WB: 63
   digital_supply_voltage: n/a
   analog_supply_voltage: n/a
 
