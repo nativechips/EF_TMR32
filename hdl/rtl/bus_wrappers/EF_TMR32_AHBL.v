@@ -36,22 +36,21 @@ module EF_TMR32_AHBL #(
 	input	[1-1:0]	pwm_fault
 );
 
-	localparam	TMR_REG_OFFSET = `AHBL_AW'd0;
-	localparam	RELOAD_REG_OFFSET = `AHBL_AW'd4;
-	localparam	PR_REG_OFFSET = `AHBL_AW'd8;
-	localparam	CMPX_REG_OFFSET = `AHBL_AW'd12;
-	localparam	CMPY_REG_OFFSET = `AHBL_AW'd16;
-	localparam	CTRL_REG_OFFSET = `AHBL_AW'd20;
-	localparam	CFG_REG_OFFSET = `AHBL_AW'd24;
-	localparam	PWM0CFG_REG_OFFSET = `AHBL_AW'd28;
-	localparam	PWM1CFG_REG_OFFSET = `AHBL_AW'd32;
-	localparam	PWMDT_REG_OFFSET = `AHBL_AW'd36;
-	localparam	PWMFC_REG_OFFSET = `AHBL_AW'd40;
-	localparam	IM_REG_OFFSET = `AHBL_AW'd3840;
-	localparam	MIS_REG_OFFSET = `AHBL_AW'd3844;
-	localparam	RIS_REG_OFFSET = `AHBL_AW'd3848;
-	localparam	IC_REG_OFFSET = `AHBL_AW'd3852;
-
+	localparam	TMR_REG_OFFSET = `AHBL_AW'h0000;
+	localparam	RELOAD_REG_OFFSET = `AHBL_AW'h0004;
+	localparam	PR_REG_OFFSET = `AHBL_AW'h0008;
+	localparam	CMPX_REG_OFFSET = `AHBL_AW'h000C;
+	localparam	CMPY_REG_OFFSET = `AHBL_AW'h0010;
+	localparam	CTRL_REG_OFFSET = `AHBL_AW'h0014;
+	localparam	CFG_REG_OFFSET = `AHBL_AW'h0018;
+	localparam	PWM0CFG_REG_OFFSET = `AHBL_AW'h001C;
+	localparam	PWM1CFG_REG_OFFSET = `AHBL_AW'h0020;
+	localparam	PWMDT_REG_OFFSET = `AHBL_AW'h0024;
+	localparam	PWMFC_REG_OFFSET = `AHBL_AW'h0028;
+	localparam	IM_REG_OFFSET = `AHBL_AW'hFF00;
+	localparam	MIS_REG_OFFSET = `AHBL_AW'hFF04;
+	localparam	RIS_REG_OFFSET = `AHBL_AW'hFF08;
+	localparam	IC_REG_OFFSET = `AHBL_AW'hFF0C;
 	wire		clk = HCLK;
 	wire		rst_n = HRESETn;
 
@@ -78,7 +77,6 @@ module EF_TMR32_AHBL #(
 	wire [1-1:0]	matchx_flag;
 	wire [1-1:0]	matchy_flag;
 	wire [1-1:0]	timeout_flag;
-
 
 	// Register Definitions
 	wire [32-1:0]	TMR_WIRE;

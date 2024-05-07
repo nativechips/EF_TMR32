@@ -24,58 +24,6 @@
 
 
 
-/*
-	Copyright 2020 AUCOHL
-
-    Author: Mohamed Shalan (mshalan@aucegypt.edu)
-	
-	Licensed under the Apache License, Version 2.0 (the "License"); 
-	you may not use this file except in compliance with the License. 
-	You may obtain a copy of the License at:
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software 
-	distributed under the License is distributed on an "AS IS" BASIS, 
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-	See the License for the specific language governing permissions and 
-	limitations under the License.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                        
-
-
 module EF_TMR32_WB #( 
 	parameter	
 		PRW = 16
@@ -97,22 +45,21 @@ module EF_TMR32_WB #(
 	input	[1-1:0]	pwm_fault
 );
 
-	localparam	TMR_REG_OFFSET = 16'd0;
-	localparam	RELOAD_REG_OFFSET = 16'd4;
-	localparam	PR_REG_OFFSET = 16'd8;
-	localparam	CMPX_REG_OFFSET = 16'd12;
-	localparam	CMPY_REG_OFFSET = 16'd16;
-	localparam	CTRL_REG_OFFSET = 16'd20;
-	localparam	CFG_REG_OFFSET = 16'd24;
-	localparam	PWM0CFG_REG_OFFSET = 16'd28;
-	localparam	PWM1CFG_REG_OFFSET = 16'd32;
-	localparam	PWMDT_REG_OFFSET = 16'd36;
-	localparam	PWMFC_REG_OFFSET = 16'd40;
-	localparam	IM_REG_OFFSET = 16'd3840;
-	localparam	MIS_REG_OFFSET = 16'd3844;
-	localparam	RIS_REG_OFFSET = 16'd3848;
-	localparam	IC_REG_OFFSET = 16'd3852;
-
+	localparam	TMR_REG_OFFSET = 16'h0000;
+	localparam	RELOAD_REG_OFFSET = 16'h0004;
+	localparam	PR_REG_OFFSET = 16'h0008;
+	localparam	CMPX_REG_OFFSET = 16'h000C;
+	localparam	CMPY_REG_OFFSET = 16'h0010;
+	localparam	CTRL_REG_OFFSET = 16'h0014;
+	localparam	CFG_REG_OFFSET = 16'h0018;
+	localparam	PWM0CFG_REG_OFFSET = 16'h001C;
+	localparam	PWM1CFG_REG_OFFSET = 16'h0020;
+	localparam	PWMDT_REG_OFFSET = 16'h0024;
+	localparam	PWMFC_REG_OFFSET = 16'h0028;
+	localparam	IM_REG_OFFSET = 16'hFF00;
+	localparam	MIS_REG_OFFSET = 16'hFF04;
+	localparam	RIS_REG_OFFSET = 16'hFF08;
+	localparam	IC_REG_OFFSET = 16'hFF0C;
 	wire		clk = clk_i;
 	wire		rst_n = (~rst_i);
 
@@ -141,8 +88,7 @@ module EF_TMR32_WB #(
 	wire [32-1:0]	tmr;
 	wire [1-1:0]	matchx_flag;
 	wire [1-1:0]	matchy_flag;
-	(* keep *) wire [1-1:0]	timeout_flag;
-
+	wire [1-1:0]	timeout_flag;
 
 	// Register Definitions
 	wire [32-1:0]	TMR_WIRE;
