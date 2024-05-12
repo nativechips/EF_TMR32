@@ -23,8 +23,8 @@ A 32-bit timer and PWM generator with the following features:
   license: APACHE 2.0
   author: Mohamed Shalan
   email: mshalan@efabless.com
-  version: v1.0.1
-  date: 07-05-2024
+  version: v1.0.2
+  date: 12-05-2024
   category: digital
   tags:
     - timer
