@@ -102,7 +102,7 @@ void EF_TMR32_setPeriodic(uint32_t tmr32_base){
      EF_TMR32_TYPE* tmr32 = (EF_TMR32_TYPE*)tmr32_base;
 
     // set the enable bit to 1 at the specified offset
-    tmr32->CTRL |= (1 << EF_TMR32_CFG_REG_P_BIT);
+    tmr32->CFG |= (1 << EF_TMR32_CFG_REG_P_BIT);
 }
 
 void EF_TMR32_setOneShot(uint32_t tmr32_base){
@@ -110,7 +110,7 @@ void EF_TMR32_setOneShot(uint32_t tmr32_base){
      EF_TMR32_TYPE* tmr32 = (EF_TMR32_TYPE*)tmr32_base;
 
     // Clear the enable bit using the specified  mask
-    tmr32->CTRL &= ~EF_TMR32_CFG_REG_P_BIT;
+    tmr32->CFG &= ~EF_TMR32_CFG_REG_P_BIT;
 }
 
 void EF_TMR32_setPWM0MatchingZeroAction(uint32_t tmr32_base, enum actions action){
@@ -327,6 +327,23 @@ int EF_TMR32_getDeadtime (uint32_t tmr32_base){
 
      return (tmr32->PWMDT);
 
+}
+
+void EF_TMR32_setPR(uint32_t tmr32_base, int value){
+     EF_TMR32_TYPE* tmr32 = (EF_TMR32_TYPE*)tmr32_base;
+     tmr32->PR = value;
+}
+
+
+void EF_TMR32_setInterruptMask(uint32_t tmr32_base, int mask){
+    EF_TMR32_TYPE* tmr32 = (EF_TMR32_TYPE*)tmr32_base;
+    tmr32->IM = mask;
+}
+void EF_TMR32_clearIrq(uint32_t tmr32_base, int mask){
+    
+    EF_TMR32_TYPE* tmr32 = (EF_TMR32_TYPE*)tmr32_base;
+
+    tmr32->IC = mask;
 }
 
 #endif

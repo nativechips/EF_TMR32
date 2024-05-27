@@ -19,13 +19,13 @@ void EF_TMR32_enable(uint32_t tmr32_base);
     */
 void EF_TMR32_restart(uint32_t tmr32_base);
 
-//! enables PWM0 by setting "P0E" bit in the CTRL register to 1 
+//! enables TMR0 by setting "P0E" bit in the CTRL register to 1 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
     */
 void EF_TMR32_PWM0Enable(uint32_t tmr32_base);
 
-//! enables PWM1 by setting "P1E" bit in the CTRL register to 1 
+//! enables TMR1 by setting "P1E" bit in the CTRL register to 1 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
     */
@@ -37,13 +37,13 @@ void EF_TMR32_PWM1Enable(uint32_t tmr32_base);
     */
 void EF_TMR32_deadtimeEnable(uint32_t tmr32_base);
 
-//! invert PWM0 by setting "P0I" bit in the CTRL register to 1 
+//! invert TMR0 by setting "P0I" bit in the CTRL register to 1 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
     */
 void EF_TMR32_PWM0Invert(uint32_t tmr32_base);
 
-//! invert PWM1 by setting "P1I" bit in the CTRL register to 1 
+//! invert TMR1 by setting "P1I" bit in the CTRL register to 1 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
     */
@@ -79,84 +79,84 @@ void EF_TMR32_setPeriodic(uint32_t tmr32_base);
     */
 void EF_TMR32_setOneShot(uint32_t tmr32_base);
 
-//! set the action of PWM0 when the timer matches Zero value
+//! set the action of TMR0 when the timer matches Zero value
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM0MatchingZeroAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM0 when the timer matches CMPX value while up counting 
+//! set the action of TMR0 when the timer matches CMPX value while up counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM0MatchingCMPXAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM0 when the timer matches CMPY value while up counting 
+//! set the action of TMR0 when the timer matches CMPY value while up counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM0MatchingCMPYAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM0 when the timer matches Reload value
+//! set the action of TMR0 when the timer matches Reload value
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM0MatchingRELOADAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM0 when the timer matches CMPX value while down counting 
+//! set the action of TMR0 when the timer matches CMPX value while down counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM0MatchingCMPYDownCountAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM0 when the timer matches CMPY value while down counting 
+//! set the action of TMR0 when the timer matches CMPY value while down counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM0MatchingCMPXDownCountAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM1 when the timer matches Zero value
+//! set the action of TMR1 when the timer matches Zero value
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM1MatchingZeroAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM1 when the timer matches CMPX value while up counting 
+//! set the action of TMR1 when the timer matches CMPX value while up counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM1MatchingCMPXAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM1 when the timer matches CMPY value while up counting 
+//! set the action of TMR1 when the timer matches CMPY value while up counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM1MatchingCMPXAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM1 when the timer matches Reload value
+//! set the action of TMR1 when the timer matches Reload value
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM1MatchingRELOADAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM1 when the timer matches CMPX value while down counting 
+//! set the action of TMR1 when the timer matches CMPX value while down counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
     */
 void EF_TMR32_setPWM1MatchingCMPYDownCountAction(uint32_t tmr32_base, enum actions action);
 
-//! set the action of PWM1 when the timer matches CMPY value while down counting 
+//! set the action of TMR1 when the timer matches CMPY value while down counting 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.
       \param action enum actions could be NONE, LOW, HIGH, or INVERT
@@ -219,4 +219,9 @@ int EF_TMR32_getTMR (uint32_t tmr32_base);
     */
 void EF_TMR32_setDeadtime (uint32_t tmr32_base, int value);
 
+void EF_TMR32_setPR(uint32_t tmr32_base, int value);
+
+void EF_TMR32_setInterruptMask(uint32_t spi_base, int mask);
+
+void EF_TMR32_clearIrq(uint32_t tmr32_base, int mask);
 #endif

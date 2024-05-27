@@ -38,7 +38,7 @@ void EF_TMR32_PWM0Enable(
 )
 ```
 
-enables PWM0 by setting "P0E" bit in the CTRL register to 1 
+enables TMR0 by setting "P0E" bit in the CTRL register to 1 
 
 **Parameters**: 
 
@@ -53,7 +53,7 @@ void EF_TMR32_PWM1Enable(
 )
 ```
 
-enables PWM1 by setting "P1E" bit in the CTRL register to 1 
+enables TMR1 by setting "P1E" bit in the CTRL register to 1 
 
 **Parameters**: 
 
@@ -83,7 +83,7 @@ void EF_TMR32_PWM0Invert(
 )
 ```
 
-invert PWM0 by setting "P0I" bit in the CTRL register to 1 
+invert TMR0 by setting "P0I" bit in the CTRL register to 1 
 
 **Parameters**: 
 
@@ -98,7 +98,7 @@ void EF_TMR32_PWM1Invert(
 )
 ```
 
-invert PWM1 by setting "P1I" bit in the CTRL register to 1 
+invert TMR1 by setting "P1I" bit in the CTRL register to 1 
 
 **Parameters**: 
 
@@ -189,7 +189,7 @@ void EF_TMR32_setPWM0MatchingZeroAction(
 )
 ```
 
-set the action of PWM0 when the timer matches Zero value 
+set the action of TMR0 when the timer matches Zero value 
 
 **Parameters**: 
 
@@ -206,7 +206,7 @@ void EF_TMR32_setPWM0MatchingCMPXAction(
 )
 ```
 
-set the action of PWM0 when the timer matches CMPX value while up counting 
+set the action of TMR0 when the timer matches CMPX value while up counting 
 
 **Parameters**: 
 
@@ -223,7 +223,7 @@ void EF_TMR32_setPWM0MatchingCMPYAction(
 )
 ```
 
-set the action of PWM0 when the timer matches CMPY value while up counting 
+set the action of TMR0 when the timer matches CMPY value while up counting 
 
 **Parameters**: 
 
@@ -240,7 +240,7 @@ void EF_TMR32_setPWM0MatchingRELOADAction(
 )
 ```
 
-set the action of PWM0 when the timer matches Reload value 
+set the action of TMR0 when the timer matches Reload value 
 
 **Parameters**: 
 
@@ -257,7 +257,7 @@ void EF_TMR32_setPWM0MatchingCMPYDownCountAction(
 )
 ```
 
-set the action of PWM0 when the timer matches CMPX value while down counting 
+set the action of TMR0 when the timer matches CMPX value while down counting 
 
 **Parameters**: 
 
@@ -274,7 +274,7 @@ void EF_TMR32_setPWM0MatchingCMPXDownCountAction(
 )
 ```
 
-set the action of PWM0 when the timer matches CMPY value while down counting 
+set the action of TMR0 when the timer matches CMPY value while down counting 
 
 **Parameters**: 
 
@@ -291,7 +291,7 @@ void EF_TMR32_setPWM1MatchingZeroAction(
 )
 ```
 
-set the action of PWM1 when the timer matches Zero value 
+set the action of TMR1 when the timer matches Zero value 
 
 **Parameters**: 
 
@@ -308,7 +308,7 @@ void EF_TMR32_setPWM1MatchingCMPXAction(
 )
 ```
 
-set the action of PWM1 when the timer matches CMPX value while up counting 
+set the action of TMR1 when the timer matches CMPX value while up counting 
 
 **Parameters**: 
 
@@ -318,10 +318,10 @@ set the action of PWM1 when the timer matches CMPX value while up counting
   * **action** enum actions could be NONE, LOW, HIGH, or INVERT 
 
 
-set the action of PWM1 when the timer matches CMPY value while up counting
+set the action of TMR1 when the timer matches CMPY value while up counting
 
 
-set the action of PWM1 when the timer matches CMPX value while up counting
+set the action of TMR1 when the timer matches CMPX value while up counting
 
 
 ###  EF_TMR32_setPWM1MatchingRELOADAction
@@ -333,7 +333,7 @@ void EF_TMR32_setPWM1MatchingRELOADAction(
 )
 ```
 
-set the action of PWM1 when the timer matches Reload value 
+set the action of TMR1 when the timer matches Reload value 
 
 **Parameters**: 
 
@@ -350,7 +350,7 @@ void EF_TMR32_setPWM1MatchingCMPYDownCountAction(
 )
 ```
 
-set the action of PWM1 when the timer matches CMPX value while down counting 
+set the action of TMR1 when the timer matches CMPX value while down counting 
 
 **Parameters**: 
 
@@ -367,7 +367,7 @@ void EF_TMR32_setPWM1MatchingCMPXDownCountAction(
 )
 ```
 
-set the action of PWM1 when the timer matches CMPY value while down counting 
+set the action of TMR1 when the timer matches CMPY value while down counting 
 
 **Parameters**: 
 
