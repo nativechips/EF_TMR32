@@ -40,9 +40,9 @@ module EF_TMR32_WB #(
                                         output  reg             ack_o,
                                         input   wire            we_i,
                                         output  wire            IRQ,
-	output	[1-1:0]	pwm0,
-	output	[1-1:0]	pwm1,
-	input	[1-1:0]	pwm_fault
+	output	wire [1-1:0]	pwm0,
+	output	wire [1-1:0]	pwm1,
+	input	wire [1-1:0]	pwm_fault
 );
 
 	localparam	TMR_REG_OFFSET = 16'h0000;

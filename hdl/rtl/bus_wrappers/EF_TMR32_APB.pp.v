@@ -38,9 +38,9 @@ module EF_TMR32_APB #(
                                         output wire [31:0]  PRDATA,
                                         output wire         IRQ
 ,
-	output	[1-1:0]	pwm0,
-	output	[1-1:0]	pwm1,
-	input	[1-1:0]	pwm_fault
+	output	wire [1-1:0]	pwm0,
+	output	wire [1-1:0]	pwm1,
+	input	wire [1-1:0]	pwm_fault
 );
 
 	localparam	TMR_REG_OFFSET = 16'h0000;
