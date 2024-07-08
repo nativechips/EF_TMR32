@@ -7,6 +7,8 @@
 
 enum actions {NONE = 0b00, LOW = 0b01, HIGH = 0b10, INVERT = 0b11};
 
+void EF_TMR32_setGclkEnable (uint32_t tmr32_base, int value);
+
 //! enables timer by setting "TE" bit in the CTRL register to 1 
     /*!
       \param tmr32_base The base memory address of TMR32 registers.

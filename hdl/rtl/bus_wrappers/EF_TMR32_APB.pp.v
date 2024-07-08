@@ -27,6 +27,10 @@ module EF_TMR32_APB #(
 	parameter	
 		PRW = 16
 ) (
+`ifdef USE_POWER_PINS
+	input wire VPWR,
+	input wire VGND,
+`endif
 	input wire          PCLK,
                                         input wire          PRESETn,
                                         input wire          PWRITE,
@@ -38,9 +42,9 @@ module EF_TMR32_APB #(
                                         output wire [31:0]  PRDATA,
                                         output wire         IRQ
 ,
-	output	wire [1-1:0]	pwm0,
-	output	wire [1-1:0]	pwm1,
-	input	wire [1-1:0]	pwm_fault
+	output	wire	[1-1:0]	pwm0,
+	output	wire	[1-1:0]	pwm1,
+	input	wire	[1-1:0]	pwm_fault
 );
 
 	localparam	TMR_REG_OFFSET = 16'h0000;
@@ -58,7 +62,23 @@ module EF_TMR32_APB #(
 	localparam	MIS_REG_OFFSET = 16'hFF04;
 	localparam	RIS_REG_OFFSET = 16'hFF08;
 	localparam	IC_REG_OFFSET = 16'hFF0C;
-	wire		clk = PCLK;
+
+        wire clk_g;
+        wire clk_gated_en = GCLK_REG[0];
+
+    (* keep *) sky130_fd_sc_hd__dlclkp_4 clk_gate(
+	`ifdef USE_POWER_PINS
+        .VPWR(VPWR), 
+        .VGND(VGND), 
+        .VNB(VGND),
+		.VPB(VPWR),
+    `endif
+        .GCLK(clk_g), 
+        .GATE(clk_gated_en), 
+        .CLK(PCLK)
+        );
+        
+	wire		clk = clk_g;
 	wire		rst_n = PRESETn;
 
 
@@ -85,7 +105,7 @@ module EF_TMR32_APB #(
 	wire [32-1:0]	tmr;
 	wire [1-1:0]	matchx_flag;
 	wire [1-1:0]	matchy_flag;
-	(* keep *) wire [1-1:0]	timeout_flag;
+	wire [1-1:0]	timeout_flag;
 
 	// Register Definitions
 	wire [32-1:0]	TMR_WIRE;
@@ -156,6 +176,12 @@ module EF_TMR32_APB #(
 	always @(posedge PCLK or negedge PRESETn) if(~PRESETn) PWMFC_REG <= 0;
                                         else if(apb_we & (PADDR[16-1:0]==PWMFC_REG_OFFSET))
                                             PWMFC_REG <= PWDATA[16-1:0];
+
+	localparam	GCLK_REG_OFFSET = 16'hFF10;
+	reg [0:0] GCLK_REG;
+	always @(posedge PCLK or negedge PRESETn) if(~PRESETn) GCLK_REG <= 0;
+                                        else if(apb_we & (PADDR[16-1:0]==GCLK_REG_OFFSET))
+                                            GCLK_REG <= PWDATA[1-1:0];
 
 	reg [2:0] IM_REG;
 	reg [2:0] IC_REG;
@@ -237,6 +263,7 @@ module EF_TMR32_APB #(
 			(PADDR[16-1:0] == MIS_REG_OFFSET)	? MIS_REG :
 			(PADDR[16-1:0] == RIS_REG_OFFSET)	? RIS_REG :
 			(PADDR[16-1:0] == IC_REG_OFFSET)	? IC_REG :
+			(PADDR[16-1:0] == GCLK_REG_OFFSET)	? GCLK_REG :
 			32'hDEADBEEF;
 
 	assign	PREADY = 1'b1;

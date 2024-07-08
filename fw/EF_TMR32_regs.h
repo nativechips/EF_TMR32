@@ -91,6 +91,7 @@ typedef struct _EF_TMR32_TYPE_ {
 	__R 	MIS;
 	__R 	RIS;
 	__W 	IC;
+	__W 	GCLK;
 } EF_TMR32_TYPE;
 
 #endif

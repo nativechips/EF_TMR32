@@ -7,6 +7,10 @@
 #define EF_TMR32_C
 #include <EF_TMR32.h>
 
+void EF_TMR32_setGclkEnable (uint32_t tmr32_base, int value){
+    EF_TMR32_TYPE* tmr32 = (EF_TMR32_TYPE*)tmr32_base;
+    tmr32->GCLK = value;
+}
 
 void EF_TMR32_enable(uint32_t tmr32_base){
 
