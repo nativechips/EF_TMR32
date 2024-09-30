@@ -50,6 +50,10 @@ end
 always #5 CLK <= !CLK;
 
 // get the timeout flag as it's not output 
-wire timeout_flag = uut.timeout_flag;
+`ifndef GL 
+    wire timeout_flag = uut.timeout_flag;
+`else 
+    wire timeout_flag = uut.\instance_to_wrap.timeout_flag ;
+`endif // GL
 
 endmodule
