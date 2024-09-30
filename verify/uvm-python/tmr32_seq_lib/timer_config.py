@@ -17,6 +17,7 @@ class timer_config(bus_seq_base):
     async def body(self):
         # get register names/address conversion dict
         await super().body()
+        await self.send_req(is_write=True, reg="CLKGATE", data_condition=lambda data: data == 1)
 
     async def read_timer_val(self):
         await self.send_req(is_write=False, reg="TMR")

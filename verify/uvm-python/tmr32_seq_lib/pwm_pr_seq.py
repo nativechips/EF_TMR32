@@ -20,6 +20,7 @@ class pwm_pr_seq(timer_config):
     async def body(self):
         # get register names/address conversion dict
         await super().body()
+        counter = 0
         while True:
             pr_ranges = self.update_pr_from_cov()
             if len(pr_ranges) == 0:
@@ -28,6 +29,9 @@ class pwm_pr_seq(timer_config):
                 await self.send_reset()
                 await self.pwm_seq(pr_range)
                 await self.pwm_delay(largest_pr=pr_range[1])
+            counter += 1
+            if counter == 7:
+                break 
 
     def update_pr_from_cov(self):
         pr_ranges = []

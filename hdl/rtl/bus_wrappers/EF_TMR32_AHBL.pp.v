@@ -23,10 +23,90 @@
 `default_nettype	none
 
 
+
+/*
+	Copyright 2020 AUCOHL
+
+    Author: Mohamed Shalan (mshalan@aucegypt.edu)
+	
+	Licensed under the Apache License, Version 2.0 (the "License"); 
+	you may not use this file except in compliance with the License. 
+	You may obtain a copy of the License at:
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software 
+	distributed under the License is distributed on an "AS IS" BASIS, 
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+	See the License for the specific language governing permissions and 
+	limitations under the License.
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+                                                
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module EF_TMR32_AHBL #( 
 	parameter	
 		PRW = 16
 ) (
+
+
+
+
 	input wire          HCLK,
                                         input wire          HRESETn,
                                         input wire          HWRITE,
@@ -39,9 +119,9 @@ module EF_TMR32_AHBL #(
                                         output wire [31:0]  HRDATA,
                                         output wire         IRQ
 ,
-	output	wire [1-1:0]	pwm0,
-	output	wire [1-1:0]	pwm1,
-	input	wire [1-1:0]	pwm_fault
+	output	wire	[1-1:0]	pwm0,
+	output	wire	[1-1:0]	pwm1,
+	input	wire	[1-1:0]	pwm_fault
 );
 
 	localparam	TMR_REG_OFFSET = 16'h0000;
@@ -59,7 +139,21 @@ module EF_TMR32_AHBL #(
 	localparam	MIS_REG_OFFSET = 16'hFF04;
 	localparam	RIS_REG_OFFSET = 16'hFF08;
 	localparam	IC_REG_OFFSET = 16'hFF0C;
-	wire		clk = HCLK;
+
+    reg [0:0] GCLK_REG;
+    wire clk_g;
+    wire clk_gated_en = GCLK_REG[0];
+    ef_gating_cell clk_gate_cell(
+        
+
+
+ // USE_POWER_PINS
+        .clk(HCLK),
+        .clk_en(clk_gated_en),
+        .clk_o(clk_g)
+    );
+    
+	wire		clk = clk_g;
 	wire		rst_n = HRESETn;
 
 
@@ -100,7 +194,7 @@ module EF_TMR32_AHBL #(
 	wire [32-1:0]	tmr;
 	wire [1-1:0]	matchx_flag;
 	wire [1-1:0]	matchy_flag;
-	(* keep *) wire [1-1:0]	timeout_flag;
+	wire [1-1:0]	timeout_flag;
 
 	// Register Definitions
 	wire [32-1:0]	TMR_WIRE;
@@ -171,6 +265,11 @@ module EF_TMR32_AHBL #(
 	always @(posedge HCLK or negedge HRESETn) if(~HRESETn) PWMFC_REG <= 0;
                                         else if(ahbl_we & (last_HADDR[16-1:0]==PWMFC_REG_OFFSET))
                                             PWMFC_REG <= HWDATA[16-1:0];
+
+	localparam	GCLK_REG_OFFSET = 16'hFF10;
+	always @(posedge HCLK or negedge HRESETn) if(~HRESETn) GCLK_REG <= 0;
+                                        else if(ahbl_we & (last_HADDR[16-1:0]==GCLK_REG_OFFSET))
+                                            GCLK_REG <= HWDATA[1-1:0];
 
 	reg [2:0] IM_REG;
 	reg [2:0] IC_REG;
@@ -251,6 +350,7 @@ module EF_TMR32_AHBL #(
 			(last_HADDR[16-1:0] == MIS_REG_OFFSET)	? MIS_REG :
 			(last_HADDR[16-1:0] == RIS_REG_OFFSET)	? RIS_REG :
 			(last_HADDR[16-1:0] == IC_REG_OFFSET)	? IC_REG :
+			(last_HADDR[16-1:0] == GCLK_REG_OFFSET)	? GCLK_REG :
 			32'hDEADBEEF;
 
 	assign	HREADYOUT = 1'b1;
