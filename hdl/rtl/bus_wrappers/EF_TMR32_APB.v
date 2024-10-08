@@ -56,27 +56,20 @@ module EF_TMR32_APB #(
 	localparam	RIS_REG_OFFSET = `APB_AW'hFF08;
 	localparam	IC_REG_OFFSET = `APB_AW'hFF0C;
 
-        reg [0:0] GCLK_REG;
-        wire clk_g;
-        wire clk_gated_en = GCLK_REG[0];
-
-	`ifdef FPGA
-		wire clk = PCLK;
-	`else
-		(* keep *) sky130_fd_sc_hd__dlclkp_4 clk_gate(
-		`ifdef USE_POWER_PINS 
-			.VPWR(VPWR), 
-			.VGND(VGND), 
-			.VNB(VGND),
-			.VPB(VPWR),
-		`endif
-			.GCLK(clk_g), 
-			.GATE(clk_gated_en), 
-			.CLK(PCLK)
-			);
-			
-		wire		clk = clk_g;
-	`endif
+    reg [0:0] GCLK_REG;
+    wire clk_g;
+    wire clk_gated_en = GCLK_REG[0];
+    ef_gating_cell clk_gate_cell(
+        `ifdef USE_POWER_PINS 
+        .vpwr(VPWR),
+        .vgnd(VGND),
+        `endif // USE_POWER_PINS
+        .clk(PCLK),
+        .clk_en(clk_gated_en),
+        .clk_o(clk_g)
+    );
+    
+	wire		clk = clk_g;
 	wire		rst_n = PRESETn;
 
 
@@ -101,7 +94,7 @@ module EF_TMR32_APB #(
 	wire [32-1:0]	tmr;
 	wire [1-1:0]	matchx_flag;
 	wire [1-1:0]	matchy_flag;
-	wire [1-1:0]	timeout_flag;
+	(* keep *)wire [1-1:0]	timeout_flag;
 
 	// Register Definitions
 	wire [32-1:0]	TMR_WIRE;

@@ -19,6 +19,7 @@ class pwm_tmr_seq(timer_config):
     async def body(self):
         # get register names/address conversion dict
         await super().body()
+        counter = 0
         while True:
             reload_vals = self.update_reload_from_cov()
             if len(reload_vals) == 0:
@@ -27,6 +28,9 @@ class pwm_tmr_seq(timer_config):
                 await self.send_reset()
                 await self.pwm_seq(reload_val)
                 await self.pwm_delay(relaod_large_val=reload_val)
+            counter += 1
+            if counter == 7:
+                break
 
     def update_reload_from_cov(self):
         reload_vals = []
