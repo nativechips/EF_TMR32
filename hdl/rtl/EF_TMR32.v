@@ -1,5 +1,5 @@
-`include "aucohl_rtl.vh"
-
+`timescale          1ns/1ps
+`default_nettype    none                                                   
 
 module EF_TMR32 #(parameter PRW = 16,
                                 PWM_FAULT_CLR_C0 = 16'hA539,
@@ -56,7 +56,9 @@ module EF_TMR32 #(parameter PRW = 16,
     );
 
     wire tick = (pr_reg == 0);
-    `SYNC_BLOCK(clk, rst_n, pr_reg, 1)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) pr_reg <= 1;
+                                                    else
         if(tmr_en)
             if(tick) pr_reg <= prescaler; 
             else pr_reg <= pr_reg - 1; 
@@ -71,7 +73,9 @@ module EF_TMR32 #(parameter PRW = 16,
     wire        tmr_eq_cmpx         =   (tmr == cmpx);
     wire        tmr_eq_cmpy         =   (tmr == cmpy);
 
-    `SYNC_BLOCK(clk, rst_n, tmr_run, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) tmr_run <= 0;
+                                                    else
         if(tmr_en_pulse)
             tmr_run <= 1;
         else if(~tmr_periodic & tick)
@@ -112,7 +116,9 @@ module EF_TMR32 #(parameter PRW = 16,
                 tmr_reg_next = tmr_reg_next + 1;
     end
 
-    `SYNC_BLOCK(clk, rst_n, tmr_reg, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) tmr_reg <= 0;
+                                                    else
     if(tmr_en)
         if(tmr_clr)
             if(tmr_mode == 2'b01)
@@ -124,7 +130,9 @@ module EF_TMR32 #(parameter PRW = 16,
                 tmr_reg <=  tmr_reg_next;
 
     // The counting direction flag
-    `SYNC_BLOCK(clk, rst_n, tmr_dir, 1)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) tmr_dir <= 1;
+                                                    else
         if(tmr_clr)
             if(tmr_mode == 2'b01)
                 tmr_dir <= 0;
@@ -181,14 +189,18 @@ module EF_TMR32 #(parameter PRW = 16,
         endcase        
     end
 
-    `SYNC_BLOCK(clk, rst_n, pwm0_reg, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) pwm0_reg <= 0;
+                                                    else
         if(pwm0_en & tick)
             if(pwm_fault)
                 pwm0_reg <= 0;
             else
                 pwm0_reg <= pwm0_reg_next;
 
-    `SYNC_BLOCK(clk, rst_n, pwm1_reg, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) pwm1_reg <= 0;
+                                                    else
         if(pwm1_en & tick)
             if(pwm_fault)
                 pwm1_reg <= 0;
@@ -199,33 +211,45 @@ module EF_TMR32 #(parameter PRW = 16,
     // Dead time insertion
     reg pwm0_delayed;
     reg [7:0] dly_cntr;
-    `SYNC_BLOCK(clk, rst_n, dly_cntr, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) dly_cntr <= 0;
+                                                    else
         if(tick)
             if(dly_cntr == 0)
                 dly_cntr <= pwm_dt;
             else 
                 dly_cntr <= dly_cntr - 1;
                 
-    `SYNC_BLOCK(clk, rst_n, pwm0_delayed, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) pwm0_delayed <= 0;
+                                                    else
         if(tick)
             if(dly_cntr == 0)
                 pwm0_delayed <= pwm0_reg;
 
     reg pwm0_w_dt, pwm1_w_dt;
-    `SYNC_BLOCK(clk, rst_n, pwm0_w_dt, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) pwm0_w_dt <= 0;
+                                                    else
         pwm0_w_dt <= pwm_dt_en ? (pwm0_delayed & pwm0_reg) : pwm0_reg;
 
-    `SYNC_BLOCK(clk, rst_n, pwm1_w_dt, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) pwm1_w_dt <= 0;
+                                                    else
         pwm1_w_dt <= pwm_dt_en ? (~pwm0_delayed & ~pwm0_reg) : pwm1_reg;
     
     // PWM Fault Handeling
     reg fault_clr_reg;
-    `SYNC_BLOCK(clk, rst_n, fault_clr_reg, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) fault_clr_reg <= 0;
+                                                    else
         if(pwm_fault_clr == PWM_FAULT_CLR_C0)
             fault_clr_reg <= 1;
         else if(pwm_fault_clr == PWM_FAULT_CLR_C1)
             fault_clr_reg <= 0;
-    `SYNC_BLOCK(clk, rst_n, fault_reg, 0)
+    always @(posedge clk, negedge rst_n)
+                                                    if(!rst_n) fault_reg <= 0;
+                                                    else
         if(pwm_fault)
             fault_reg <= 1;
         else if( fault_clr_reg & (pwm_fault_clr == PWM_FAULT_CLR_C1) )

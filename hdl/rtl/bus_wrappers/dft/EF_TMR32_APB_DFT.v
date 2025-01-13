@@ -21,20 +21,20 @@
 
 `timescale 1ns / 1ps `default_nettype none
 
-module EF_TMR32_WB #(
+module EF_TMR32_APB #(
     parameter PRW = 16
 ) (
 
-    input  wire         clk_i,
-    input  wire         rst_i,
-    input  wire [ 31:0] adr_i,
-    input  wire [ 31:0] dat_i,
-    output wire [ 31:0] dat_o,
-    input  wire [  3:0] sel_i,
-    input  wire         cyc_i,
-    input  wire         stb_i,
-    output reg          ack_o,
-    input  wire         we_i,
+    input  wire         sc_testmode,
+    input  wire         PCLK,
+    input  wire         PRESETn,
+    input  wire         PWRITE,
+    input  wire [ 31:0] PWDATA,
+    input  wire [ 31:0] PADDR,
+    input  wire         PENABLE,
+    input  wire         PSEL,
+    output wire         PREADY,
+    output wire [ 31:0] PRDATA,
     output wire         IRQ,
     output wire [1-1:0] pwm0,
     output wire [1-1:0] pwm1,
@@ -60,22 +60,21 @@ module EF_TMR32_WB #(
   reg [0:0] GCLK_REG;
   wire clk_g;
 
-  wire clk_gated_en = GCLK_REG[0];
+  wire clk_gated_en = sc_testmode ? 1'b1 : GCLK_REG[0];
   ef_util_gating_cell clk_gate_cell (
 
       // USE_POWER_PINS
-      .clk(clk_i),
+      .clk(PCLK),
       .clk_en(clk_gated_en),
       .clk_o(clk_g)
   );
 
   wire           clk = clk_g;
-  wire           rst_n = (~rst_i);
+  wire           rst_n = PRESETn;
 
-  wire           wb_valid = cyc_i & stb_i;
-  wire           wb_we = we_i & wb_valid;
-  wire           wb_re = ~we_i & wb_valid;
-  wire [    3:0] wb_byte_sel = sel_i & {4{wb_we}};
+  wire           apb_valid = PSEL & PENABLE;
+  wire           apb_we = PWRITE & apb_valid;
+  wire           apb_re = ~PWRITE & apb_valid;
 
   wire [  1-1:0] tmr_en;
   wire [  1-1:0] tmr_start;
@@ -104,27 +103,27 @@ module EF_TMR32_WB #(
 
   reg [31:0] RELOAD_REG;
   assign tmr_reload = RELOAD_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) RELOAD_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == RELOAD_REG_OFFSET)) RELOAD_REG <= dat_i[32-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) RELOAD_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == RELOAD_REG_OFFSET)) RELOAD_REG <= PWDATA[32-1:0];
 
   reg [PRW-1:0] PR_REG;
   assign prescaler = PR_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) PR_REG <= 'h0;
-    else if (wb_we & (adr_i[16-1:0] == PR_REG_OFFSET)) PR_REG <= dat_i[PRW-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) PR_REG <= 'h0;
+    else if (apb_we & (PADDR[16-1:0] == PR_REG_OFFSET)) PR_REG <= PWDATA[PRW-1:0];
 
   reg [31:0] CMPX_REG;
   assign cmpx = CMPX_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) CMPX_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == CMPX_REG_OFFSET)) CMPX_REG <= dat_i[32-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) CMPX_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == CMPX_REG_OFFSET)) CMPX_REG <= PWDATA[32-1:0];
 
   reg [31:0] CMPY_REG;
   assign cmpy = CMPY_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) CMPY_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == CMPY_REG_OFFSET)) CMPY_REG <= dat_i[32-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) CMPY_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == CMPY_REG_OFFSET)) CMPY_REG <= PWDATA[32-1:0];
 
   reg [6:0] CTRL_REG;
   assign tmr_en = CTRL_REG[0 : 0];
@@ -134,56 +133,56 @@ module EF_TMR32_WB #(
   assign pwm_dt_en = CTRL_REG[4 : 4];
   assign pwm0_inv = CTRL_REG[5 : 5];
   assign pwm1_inv = CTRL_REG[6 : 6];
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) CTRL_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == CTRL_REG_OFFSET)) CTRL_REG <= dat_i[7-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) CTRL_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == CTRL_REG_OFFSET)) CTRL_REG <= PWDATA[7-1:0];
 
   reg [2:0] CFG_REG;
   assign tmr_cfg = CFG_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) CFG_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == CFG_REG_OFFSET)) CFG_REG <= dat_i[3-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) CFG_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == CFG_REG_OFFSET)) CFG_REG <= PWDATA[3-1:0];
 
   reg [11:0] PWM0CFG_REG;
   assign pwm0_cfg = PWM0CFG_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) PWM0CFG_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == PWM0CFG_REG_OFFSET)) PWM0CFG_REG <= dat_i[12-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) PWM0CFG_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == PWM0CFG_REG_OFFSET)) PWM0CFG_REG <= PWDATA[12-1:0];
 
   reg [15:0] PWM1CFG_REG;
   assign pwm1_cfg = PWM1CFG_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) PWM1CFG_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == PWM1CFG_REG_OFFSET)) PWM1CFG_REG <= dat_i[16-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) PWM1CFG_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == PWM1CFG_REG_OFFSET)) PWM1CFG_REG <= PWDATA[16-1:0];
 
   reg [7:0] PWMDT_REG;
   assign pwm_dt = PWMDT_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) PWMDT_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == PWMDT_REG_OFFSET)) PWMDT_REG <= dat_i[8-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) PWMDT_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == PWMDT_REG_OFFSET)) PWMDT_REG <= PWDATA[8-1:0];
 
   reg [15:0] PWMFC_REG;
   assign pwm_fault_clr = PWMFC_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) PWMFC_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == PWMFC_REG_OFFSET)) PWMFC_REG <= dat_i[16-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) PWMFC_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == PWMFC_REG_OFFSET)) PWMFC_REG <= PWDATA[16-1:0];
 
   localparam GCLK_REG_OFFSET = 16'hFF10;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) GCLK_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == GCLK_REG_OFFSET)) GCLK_REG <= dat_i[1-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) GCLK_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == GCLK_REG_OFFSET)) GCLK_REG <= PWDATA[1-1:0];
 
   reg  [  2:0] IM_REG;
   reg  [  2:0] IC_REG;
   reg  [  2:0] RIS_REG;
 
   wire [3-1:0] MIS_REG = RIS_REG & IM_REG;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) IM_REG <= 0;
-    else if (wb_we & (adr_i[16-1:0] == IM_REG_OFFSET)) IM_REG <= dat_i[3-1:0];
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) IC_REG <= 3'b0;
-    else if (wb_we & (adr_i[16-1:0] == IC_REG_OFFSET)) IC_REG <= dat_i[3-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) IM_REG <= 0;
+    else if (apb_we & (PADDR[16-1:0] == IM_REG_OFFSET)) IM_REG <= PWDATA[3-1:0];
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) IC_REG <= 3'b0;
+    else if (apb_we & (PADDR[16-1:0] == IC_REG_OFFSET)) IC_REG <= PWDATA[3-1:0];
     else IC_REG <= 3'd0;
 
   wire [0:0] TO = timeout_flag;
@@ -191,8 +190,8 @@ module EF_TMR32_WB #(
   wire [0:0] MY = matchy_flag;
 
   integer _i_;
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) RIS_REG <= 0;
+  always @(posedge PCLK or negedge PRESETn)
+    if (~PRESETn) RIS_REG <= 0;
     else begin
       for (_i_ = 0; _i_ < 1; _i_ = _i_ + 1) begin
         if (IC_REG[_i_]) RIS_REG[_i_] <= 1'b0;
@@ -240,26 +239,24 @@ module EF_TMR32_WB #(
       .pwm_fault(pwm_fault)
   );
 
-  assign	dat_o = 
-			(adr_i[16-1:0] == TMR_REG_OFFSET)	? TMR_WIRE :
-			(adr_i[16-1:0] == RELOAD_REG_OFFSET)	? RELOAD_REG :
-			(adr_i[16-1:0] == PR_REG_OFFSET)	? PR_REG :
-			(adr_i[16-1:0] == CMPX_REG_OFFSET)	? CMPX_REG :
-			(adr_i[16-1:0] == CMPY_REG_OFFSET)	? CMPY_REG :
-			(adr_i[16-1:0] == CTRL_REG_OFFSET)	? CTRL_REG :
-			(adr_i[16-1:0] == CFG_REG_OFFSET)	? CFG_REG :
-			(adr_i[16-1:0] == PWM0CFG_REG_OFFSET)	? PWM0CFG_REG :
-			(adr_i[16-1:0] == PWM1CFG_REG_OFFSET)	? PWM1CFG_REG :
-			(adr_i[16-1:0] == PWMDT_REG_OFFSET)	? PWMDT_REG :
-			(adr_i[16-1:0] == PWMFC_REG_OFFSET)	? PWMFC_REG :
-			(adr_i[16-1:0] == IM_REG_OFFSET)	? IM_REG :
-			(adr_i[16-1:0] == MIS_REG_OFFSET)	? MIS_REG :
-			(adr_i[16-1:0] == RIS_REG_OFFSET)	? RIS_REG :
-			(adr_i[16-1:0] == IC_REG_OFFSET)	? IC_REG :
+  assign	PRDATA = 
+			(PADDR[16-1:0] == TMR_REG_OFFSET)	? TMR_WIRE :
+			(PADDR[16-1:0] == RELOAD_REG_OFFSET)	? RELOAD_REG :
+			(PADDR[16-1:0] == PR_REG_OFFSET)	? PR_REG :
+			(PADDR[16-1:0] == CMPX_REG_OFFSET)	? CMPX_REG :
+			(PADDR[16-1:0] == CMPY_REG_OFFSET)	? CMPY_REG :
+			(PADDR[16-1:0] == CTRL_REG_OFFSET)	? CTRL_REG :
+			(PADDR[16-1:0] == CFG_REG_OFFSET)	? CFG_REG :
+			(PADDR[16-1:0] == PWM0CFG_REG_OFFSET)	? PWM0CFG_REG :
+			(PADDR[16-1:0] == PWM1CFG_REG_OFFSET)	? PWM1CFG_REG :
+			(PADDR[16-1:0] == PWMDT_REG_OFFSET)	? PWMDT_REG :
+			(PADDR[16-1:0] == PWMFC_REG_OFFSET)	? PWMFC_REG :
+			(PADDR[16-1:0] == IM_REG_OFFSET)	? IM_REG :
+			(PADDR[16-1:0] == MIS_REG_OFFSET)	? MIS_REG :
+			(PADDR[16-1:0] == RIS_REG_OFFSET)	? RIS_REG :
+			(PADDR[16-1:0] == GCLK_REG_OFFSET)	? GCLK_REG :
 			32'hDEADBEEF;
 
-  always @(posedge clk_i or posedge rst_i)
-    if (rst_i) ack_o <= 1'b0;
-    else if (wb_valid & ~ack_o) ack_o <= 1'b1;
-    else ack_o <= 1'b0;
+  assign PREADY = 1'b1;
+
 endmodule
