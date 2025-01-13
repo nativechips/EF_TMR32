@@ -191,9 +191,9 @@ The following are the bit definitions for the interrupt registers:
 |1|MX|1|TMR matches CMPX register.|
 |2|MY|1|TMR matches CMPY register.|
 ### Clock Gating
-The IP has clock gating feature, enabling the selective activation and deactivation of the clock as required through the ``GCLK`` register. This functionality is implemented through the ``ef_util_gating_cell``, which is part of the the common modules library, [ef_util_lib.v](https://github.com/efabless/EF_IP_UTIL/blob/main/hdl/ef_util_lib.v). By default, the clock gating is disabled. To enable behavioral implmentation clock gating for simulation purposes, you should use the ``CLKG_GENERIC`` macro. Alternatively, if you wish to use the SKY130 clock gating cell, ``sky130_fd_sc_hd__dlclkp_4``, you can enable it by using the ``CLKG_SKY130_HD`` macro.
+The IP includes a clock gating feature that allows selective activation and deactivation of the clock using the ``GCLK`` register. This capability is implemented through the ``ef_util_gating_cell`` module, which is part of the common modules library, [ef_util_lib.v](https://github.com/efabless/EF_IP_UTIL/blob/main/hdl/ef_util_lib.v). By default, the clock gating is disabled. To enable behavioral implmentation clock gating, only for simulation purposes, you should define the ``CLKG_GENERIC`` macro. Alternatively, define the ``CLKG_SKY130_HD`` macro if you wish to use the SKY130 HD library clock gating cell, ``sky130_fd_sc_hd__dlclkp_4``.
 
-**Note:** If you choose the [OpenLane2](https://github.com/efabless/openlane2) flow for implementation and would like to add the clock gating feature, you need to add ``CLKG_SKY130_HD`` macro to the ``VERILOG_DEFINES`` configuration variable. Update OpenLane2 YAML configuration file as follows: 
+**Note:** If you choose the [OpenLane2](https://github.com/efabless/openlane2) flow for implementation and would like to enable the clock gating feature, you need to add ``CLKG_SKY130_HD`` macro to the ``VERILOG_DEFINES`` configuration variable. Update OpenLane2 YAML configuration file as follows: 
 ```
 VERILOG_DEFINES:
 - CLKG_SKY130_HD
@@ -240,13 +240,13 @@ VERILOG_DEFINES:
 Firmware drivers for EF_TMR32 can be found in the [fw](https://github.com/efabless/EF_TMR32/tree/main/fw) directory. EF_TMR32 driver documentation  is available [here](https://github.com/efabless/EF_TMR32/blob/main/fw/README.md).
 You can also find an example C application using the EF_TMR32 drivers [here]().
 ## Installation:
-You can install the IP either by cloning the repository or using [IPM](https://github.com/efabless/IPM), an open-source IP Package Manager.
+You can install the IP either by cloning this repository or by using [IPM](https://github.com/efabless/IPM).
 ##### 1. Using [IPM](https://github.com/efabless/IPM):
-- If you do not have IPM installed, follow installation guide  [here](https://github.com/efabless/IPM/blob/main/README.md)
-- Run ```ipm install EF_TMR32```
+- [Optional] If you do not have IPM installed, follow the installation guide [here](https://github.com/efabless/IPM/blob/main/README.md)
+- After installing IPM, execute the following command ```ipm install EF_TMR32```.
 > **Note:** This method is recommended as it automatically installs [EF_IP_UTIL](https://github.com/efabless/EF_IP_UTIL.git) as a dependency.
-##### 2. Cloning: 
-- Clone [EF_IP_UTIL](https://github.com/efabless/EF_IP_UTIL.git) repository, which includes the required modules from the common.
+##### 2. Cloning this repo: 
+- Clone [EF_IP_UTIL](https://github.com/efabless/EF_IP_UTIL.git) repository, which includes the required modules from the common modules library, [ef_util_lib.v](https://github.com/efabless/EF_IP_UTIL/blob/main/hdl/ef_util_lib.v).
 ```git clone https://github.com/efabless/EF_IP_UTIL.git```
-- Then, clone the IP repository
+- Clone the IP repository
 ```git clone github.com/efabless/EF_TMR32/tree/main```
