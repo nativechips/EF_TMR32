@@ -49,7 +49,7 @@ module EF_TMR32 #(parameter PRW = 16,
 
     reg             fault_reg;
 
-    aucohl_ped TMREN_PE (
+    ef_util_ped TMREN_PE (
         .clk(clk),
         .in(tmr_en),
         .out(tmr_clr)
