@@ -158,17 +158,17 @@ external_interface:
   port: pwm0
   direction: output
   width: 1
-  description: The generated PWM0 signal 
+  description: Output of pwm0 ; this signal is a square wave where the width of the pulse (on time) is varied to control the power delivered to a load, often used for controlling motors, lights, and other devices.
 - name: pwm1
   port: pwm1
   direction: output
   width: 1
-  description: The generated PWM1 signal 
+  description: Output of pwm1 ; this signal is a square wave where the width of the pulse (on time) is varied to control the power delivered to a load, often used for controlling motors, lights, and other devices.
 - name: pwm_fault
   port: pwm_fault
   direction: input
   width: 1
-  description: PWM fault input 
+  description: This is a signal that indicates a fault or error condition in the PWM system, typically used for safety purposes to shut down or adjust the operation of the device in case of malfunction.
 
 registers:
 - name: TMR

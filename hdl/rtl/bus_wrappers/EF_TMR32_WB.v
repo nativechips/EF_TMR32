@@ -7,7 +7,7 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 
-	    http://www.apache.org/licenses/LICENSE-2.0
+	    www.apache.org/licenses/LICENSE-2.0
 
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
@@ -97,7 +97,7 @@ module EF_TMR32_WB #(
   wire [ 32-1:0] tmr;
   wire [  1-1:0] matchx_flag;
   wire [  1-1:0] matchy_flag;
-  (* keep *)wire [  1-1:0] timeout_flag;
+  wire [  1-1:0] timeout_flag;
 
   // Register Definitions
   wire [ 32-1:0] TMR_WIRE;

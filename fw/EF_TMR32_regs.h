@@ -7,7 +7,7 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 
-	    http://www.apache.org/licenses/LICENSE-2.0
+	    www.apache.org/licenses/LICENSE-2.0
 
 	Unless required by applicable law or agreed to in writing, software
 	distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,60 +20,112 @@
 #ifndef EF_TMR32REGS_H
 #define EF_TMR32REGS_H
 
+ 
+/******************************************************************************
+* Includes
+******************************************************************************/
+#include <stdint.h>
+
+/******************************************************************************
+* Macros and Constants
+******************************************************************************/
+
 #ifndef IO_TYPES
 #define IO_TYPES
-#define   __R     volatile const unsigned int
-#define   __W     volatile       unsigned int
-#define   __RW    volatile       unsigned int
+#define   __R     volatile const uint32_t
+#define   __W     volatile       uint32_t
+#define   __RW    volatile       uint32_t
 #endif
 
-#define EF_TMR32_CTRL_REG_TE_BIT	0
-#define EF_TMR32_CTRL_REG_TE_MASK	0x1
-#define EF_TMR32_CTRL_REG_TS_BIT	1
-#define EF_TMR32_CTRL_REG_TS_MASK	0x2
-#define EF_TMR32_CTRL_REG_P0E_BIT	2
-#define EF_TMR32_CTRL_REG_P0E_MASK	0x4
-#define EF_TMR32_CTRL_REG_P1E_BIT	3
-#define EF_TMR32_CTRL_REG_P1E_MASK	0x8
-#define EF_TMR32_CTRL_REG_DTE_BIT	4
-#define EF_TMR32_CTRL_REG_DTE_MASK	0x10
-#define EF_TMR32_CTRL_REG_PI0_BIT	5
-#define EF_TMR32_CTRL_REG_PI0_MASK	0x20
-#define EF_TMR32_CTRL_REG_PI1_BIT	6
-#define EF_TMR32_CTRL_REG_PI1_MASK	0x40
-#define EF_TMR32_CFG_REG_DIR_BIT	0
-#define EF_TMR32_CFG_REG_DIR_MASK	0x3
-#define EF_TMR32_CFG_REG_P_BIT	2
-#define EF_TMR32_CFG_REG_P_MASK	0x4
-#define EF_TMR32_PWM0CFG_REG_E0_BIT	0
-#define EF_TMR32_PWM0CFG_REG_E0_MASK	0x3
-#define EF_TMR32_PWM0CFG_REG_E1_BIT	2
-#define EF_TMR32_PWM0CFG_REG_E1_MASK	0xc
-#define EF_TMR32_PWM0CFG_REG_E2_BIT	4
-#define EF_TMR32_PWM0CFG_REG_E2_MASK	0x30
-#define EF_TMR32_PWM0CFG_REG_E3_BIT	6
-#define EF_TMR32_PWM0CFG_REG_E3_MASK	0xc0
-#define EF_TMR32_PWM0CFG_REG_E4_BIT	8
-#define EF_TMR32_PWM0CFG_REG_E4_MASK	0x300
-#define EF_TMR32_PWM0CFG_REG_E5_BIT	10
-#define EF_TMR32_PWM0CFG_REG_E5_MASK	0xc00
-#define EF_TMR32_PWM1CFG_REG_E0_BIT	0
-#define EF_TMR32_PWM1CFG_REG_E0_MASK	0x3
-#define EF_TMR32_PWM1CFG_REG_E1_BIT	2
-#define EF_TMR32_PWM1CFG_REG_E1_MASK	0xc
-#define EF_TMR32_PWM1CFG_REG_E2_BIT	4
-#define EF_TMR32_PWM1CFG_REG_E2_MASK	0x30
-#define EF_TMR32_PWM1CFG_REG_E3_BIT	6
-#define EF_TMR32_PWM1CFG_REG_E3_MASK	0xc0
-#define EF_TMR32_PWM1CFG_REG_E4_BIT	8
-#define EF_TMR32_PWM1CFG_REG_E4_MASK	0x300
-#define EF_TMR32_PWM1CFG_REG_E5_BIT	10
-#define EF_TMR32_PWM1CFG_REG_E5_MASK	0xc00
+#define EF_TMR32_TMR_REG_TMR_BIT	((uint32_t)0)
+#define EF_TMR32_TMR_REG_TMR_MASK	((uint32_t)0xffffffff)
+#define EF_TMR32_TMR_REG_MAX_VALUE	((uint32_t)0xFFFFFFFF)
 
-#define EF_TMR32_TO_FLAG	0x1
-#define EF_TMR32_MX_FLAG	0x2
-#define EF_TMR32_MY_FLAG	0x4
+#define EF_TMR32_RELOAD_REG_RELOAD_BIT	((uint32_t)0)
+#define EF_TMR32_RELOAD_REG_RELOAD_MASK	((uint32_t)0xffffffff)
+#define EF_TMR32_RELOAD_REG_MAX_VALUE	((uint32_t)0xFFFFFFFF)
 
+#define EF_TMR32_PR_REG_PR_BIT	((uint32_t)0)
+#define EF_TMR32_PR_REG_PR_MASK	((uint32_t)0xffff)
+#define EF_TMR32_PR_REG_MAX_VALUE	((uint32_t)0xFFFF)
+
+#define EF_TMR32_CMPX_REG_CMPX_BIT	((uint32_t)0)
+#define EF_TMR32_CMPX_REG_CMPX_MASK	((uint32_t)0xffffffff)
+#define EF_TMR32_CMPX_REG_MAX_VALUE	((uint32_t)0xFFFFFFFF)
+
+#define EF_TMR32_CMPY_REG_CMPY_BIT	((uint32_t)0)
+#define EF_TMR32_CMPY_REG_CMPY_MASK	((uint32_t)0xffffffff)
+#define EF_TMR32_CMPY_REG_MAX_VALUE	((uint32_t)0xFFFFFFFF)
+
+#define EF_TMR32_CTRL_REG_TE_BIT	((uint32_t)0)
+#define EF_TMR32_CTRL_REG_TE_MASK	((uint32_t)0x1)
+#define EF_TMR32_CTRL_REG_TS_BIT	((uint32_t)1)
+#define EF_TMR32_CTRL_REG_TS_MASK	((uint32_t)0x2)
+#define EF_TMR32_CTRL_REG_P0E_BIT	((uint32_t)2)
+#define EF_TMR32_CTRL_REG_P0E_MASK	((uint32_t)0x4)
+#define EF_TMR32_CTRL_REG_P1E_BIT	((uint32_t)3)
+#define EF_TMR32_CTRL_REG_P1E_MASK	((uint32_t)0x8)
+#define EF_TMR32_CTRL_REG_DTE_BIT	((uint32_t)4)
+#define EF_TMR32_CTRL_REG_DTE_MASK	((uint32_t)0x10)
+#define EF_TMR32_CTRL_REG_PI0_BIT	((uint32_t)5)
+#define EF_TMR32_CTRL_REG_PI0_MASK	((uint32_t)0x20)
+#define EF_TMR32_CTRL_REG_PI1_BIT	((uint32_t)6)
+#define EF_TMR32_CTRL_REG_PI1_MASK	((uint32_t)0x40)
+#define EF_TMR32_CTRL_REG_MAX_VALUE	((uint32_t)0x7F)
+
+#define EF_TMR32_CFG_REG_DIR_BIT	((uint32_t)0)
+#define EF_TMR32_CFG_REG_DIR_MASK	((uint32_t)0x3)
+#define EF_TMR32_CFG_REG_P_BIT	((uint32_t)2)
+#define EF_TMR32_CFG_REG_P_MASK	((uint32_t)0x4)
+#define EF_TMR32_CFG_REG_MAX_VALUE	((uint32_t)0x7)
+
+#define EF_TMR32_PWM0CFG_REG_E0_BIT	((uint32_t)0)
+#define EF_TMR32_PWM0CFG_REG_E0_MASK	((uint32_t)0x3)
+#define EF_TMR32_PWM0CFG_REG_E1_BIT	((uint32_t)2)
+#define EF_TMR32_PWM0CFG_REG_E1_MASK	((uint32_t)0xc)
+#define EF_TMR32_PWM0CFG_REG_E2_BIT	((uint32_t)4)
+#define EF_TMR32_PWM0CFG_REG_E2_MASK	((uint32_t)0x30)
+#define EF_TMR32_PWM0CFG_REG_E3_BIT	((uint32_t)6)
+#define EF_TMR32_PWM0CFG_REG_E3_MASK	((uint32_t)0xc0)
+#define EF_TMR32_PWM0CFG_REG_E4_BIT	((uint32_t)8)
+#define EF_TMR32_PWM0CFG_REG_E4_MASK	((uint32_t)0x300)
+#define EF_TMR32_PWM0CFG_REG_E5_BIT	((uint32_t)10)
+#define EF_TMR32_PWM0CFG_REG_E5_MASK	((uint32_t)0xc00)
+#define EF_TMR32_PWM0CFG_REG_MAX_VALUE	((uint32_t)0xFFF)
+
+#define EF_TMR32_PWM1CFG_REG_E0_BIT	((uint32_t)0)
+#define EF_TMR32_PWM1CFG_REG_E0_MASK	((uint32_t)0x3)
+#define EF_TMR32_PWM1CFG_REG_E1_BIT	((uint32_t)2)
+#define EF_TMR32_PWM1CFG_REG_E1_MASK	((uint32_t)0xc)
+#define EF_TMR32_PWM1CFG_REG_E2_BIT	((uint32_t)4)
+#define EF_TMR32_PWM1CFG_REG_E2_MASK	((uint32_t)0x30)
+#define EF_TMR32_PWM1CFG_REG_E3_BIT	((uint32_t)6)
+#define EF_TMR32_PWM1CFG_REG_E3_MASK	((uint32_t)0xc0)
+#define EF_TMR32_PWM1CFG_REG_E4_BIT	((uint32_t)8)
+#define EF_TMR32_PWM1CFG_REG_E4_MASK	((uint32_t)0x300)
+#define EF_TMR32_PWM1CFG_REG_E5_BIT	((uint32_t)10)
+#define EF_TMR32_PWM1CFG_REG_E5_MASK	((uint32_t)0xc00)
+#define EF_TMR32_PWM1CFG_REG_MAX_VALUE	((uint32_t)0xFFFF)
+
+#define EF_TMR32_PWMDT_REG_PWMDT_BIT	((uint32_t)0)
+#define EF_TMR32_PWMDT_REG_PWMDT_MASK	((uint32_t)0xff)
+#define EF_TMR32_PWMDT_REG_MAX_VALUE	((uint32_t)0xFF)
+
+#define EF_TMR32_PWMFC_REG_PWMFC_BIT	((uint32_t)0)
+#define EF_TMR32_PWMFC_REG_PWMFC_MASK	((uint32_t)0xffff)
+#define EF_TMR32_PWMFC_REG_MAX_VALUE	((uint32_t)0xFFFF)
+
+
+#define EF_TMR32_TO_FLAG	((uint32_t)0x1)
+#define EF_TMR32_MX_FLAG	((uint32_t)0x2)
+#define EF_TMR32_MY_FLAG	((uint32_t)0x4)
+
+
+          
+/******************************************************************************
+* Typedefs and Enums
+******************************************************************************/
+          
 typedef struct _EF_TMR32_TYPE_ {
 	__R 	TMR;
 	__W 	RELOAD;
@@ -94,5 +146,26 @@ typedef struct _EF_TMR32_TYPE_ {
 	__W 	GCLK;
 } EF_TMR32_TYPE;
 
+typedef struct _EF_TMR32_TYPE_ *EF_TMR32_TYPE_PTR;     // Pointer to the register structure
+
+  
+/******************************************************************************
+* Function Prototypes
+******************************************************************************/
+
+
+
+/******************************************************************************
+* External Variables
+******************************************************************************/
+
+
+
+
 #endif
 
+/******************************************************************************
+* End of File
+******************************************************************************/
+          
+          
