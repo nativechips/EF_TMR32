@@ -26,7 +26,7 @@ Directory Structure:
 
     - hdl 
         - rtl 
-            - **EF_TMR32.v**: Verilog source code for the EF_TMR32 design, including the core logic of the UART module.
+            - **EF_TMR32.v**: Verilog source code for the EF_TMR32 design
             - **bus_wrappers**
                 - **EF_TMR32_AHBL.v**: Verilog wrapper to interface the EF_TMR32 with the AMBA High-performance Bus (AHB-Lite) protocol.
                 - **EF_TMR32_APB.v**: Verilog wrapper to interface the EF_TMR32 with the Advanced Peripheral Bus (APB) protocol.
