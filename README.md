@@ -207,8 +207,8 @@ VERILOG_DEFINES:
 - CLKG_SKY130_HD
 ```
 ## Firmware Drivers:
-Firmware drivers for EF_TMR32 can be found in the [EF_TMR32](https://github.com/efabless/EF_APIs_HUB/tree/main/EF_TMR32) directory in the [EF_APIs_HUB](https://github.com/efabless/EF_APIs_HUB) repo. EF_TMR32 driver documentation  is available [here](https://github.com/efabless/EF_APIs_HUB/tree/main/EF_TMR32/README.md).
-You can also find an example C application using the EF_TMR32 drivers [here](https://github.com/efabless/EF_APIs_HUB/tree/main/EF_TMR32/EF_TMR32_example.c).
+Firmware drivers for EF_TMR32 can be found in the [Drivers](https://github.com/efabless/EFIS/tree/main/Drivers) directory in the [EFIS](https://github.com/efabless/EFIS) (Efabless Firmware Interface Standard) repo. EF_TMR32 driver documentation  is available [here](https://github.com/efabless/EFIS/blob/main/Drivers/docs/EF_Driver_TMR32/README.md).
+You can also find an example C application using the EF_TMR32 drivers [here](https://github.com/efabless/EFIS/tree/main/Drivers/docs/EF_Driver_TMR32/example).
 ## Installation:
 You can install the IP either by cloning this repository or by using [IPM](https://github.com/efabless/IPM).
 ### 1. Using [IPM](https://github.com/efabless/IPM):
