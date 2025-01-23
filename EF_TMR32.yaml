@@ -11,7 +11,7 @@ A 32-bit timer and PWM generator with the following features:
 
 - Two independent PWM channels with two compare registers.
 
-- Optional PWM signal inversion.
+- Optional PWM signal inversion: v1.1.0
 
 - Configurable PWM dead time/band to generate PWM signals such as those required by a half-H bridge driver.
 
@@ -23,8 +23,8 @@ A 32-bit timer and PWM generator with the following features:
   license: APACHE 2.0
   author: Efabless Corp.
   email: ip_admin@efabless.com
-  version: v1.0.11
-  date: 8-10-2024
+  version: v1.1.0
+  date: 2025-01-23
   category: digital
   tags:
     - timer
