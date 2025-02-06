@@ -24,7 +24,7 @@ A 32-bit timer and PWM generator with the following features:
   author: Efabless Corp.
   email: ip_admin@efabless.com
   version: v1.1.0
-  date: 2025-01-23
+  date: 23-01-2025
   category: digital
   tags:
     - timer
