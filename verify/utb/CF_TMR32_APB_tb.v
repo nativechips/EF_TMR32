@@ -1,7 +1,8 @@
 /*
-	Copyright 2024 Efabless Corp.
+	Copyright 2024-2025 ChipFoundry, a DBA of Umbralogic Technologies LLC.
 
-	Author: Mohamed Shalan (mshalan@efabless.com)
+	Original Copyright 2024 Efabless Corp.
+	Author: Efabless Corp. (ip_admin@efabless.com)
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -23,57 +24,54 @@
 
 `default_nettype	none
 
-`define			WB_AW			16
+`define			APB_AW			16
 `define			MS_TB_SIMTIME		1_000_000
 
 `include		"tb_macros.vh"
 
-module EF_TMR32_WB_tb;
+module CF_TMR32_APB_tb;
 
 	// Change the following parameters as desired
 	parameter real CLOCK_PERIOD = 100.0;
 	parameter real RESET_DURATION = 999.0;
 
 	// DON NOT Change the following parameters
-	localparam [`WB_AW-1:0]
-			TMR_REG_OFFSET =	`WB_AW'h0000,
-			RELOAD_REG_OFFSET =	`WB_AW'h0004,
-			PR_REG_OFFSET =	`WB_AW'h0008,
-			CMPX_REG_OFFSET =	`WB_AW'h000c,
-			CMPY_REG_OFFSET =	`WB_AW'h0010,
-			CTRL_REG_OFFSET =	`WB_AW'h0014,
-			CFG_REG_OFFSET =	`WB_AW'h0018,
-			PWM0CFG_REG_OFFSET =	`WB_AW'h001c,
-			PWM1CFG_REG_OFFSET =	`WB_AW'h0020,
-			PWMDT_REG_OFFSET =	`WB_AW'h0024,
-			PWMFC_REG_OFFSET =	`WB_AW'h0028,
-			IM_REG_OFFSET =		`WB_AW'h0f00,
-			IC_REG_OFFSET =		`WB_AW'h0f0c,
-			RIS_REG_OFFSET =	`WB_AW'h0f08,
-			MIS_REG_OFFSET =	`WB_AW'h0f04;
+	localparam [`APB_AW-1:0]
+				TMR_REG_OFFSET =        `APB_AW'h0000,
+				RELOAD_REG_OFFSET =     `APB_AW'h0004,
+				PR_REG_OFFSET = `APB_AW'h0008,
+				CMPX_REG_OFFSET =       `APB_AW'h000c,
+				CMPY_REG_OFFSET =       `APB_AW'h0010,
+				CTRL_REG_OFFSET =       `APB_AW'h0014,
+				CFG_REG_OFFSET =        `APB_AW'h0018,
+				PWM0CFG_REG_OFFSET =    `APB_AW'h001c,
+				PWM1CFG_REG_OFFSET =    `APB_AW'h0020,
+				PWMDT_REG_OFFSET =      `APB_AW'h0024,
+				IM_REG_OFFSET =         `APB_AW'h0f00,
+				IC_REG_OFFSET =         `APB_AW'h0f0c,
+				RIS_REG_OFFSET =        `APB_AW'h0f08,
+				MIS_REG_OFFSET =        `APB_AW'h0f04;
 
-	`TB_WB_SIG
+	`TB_APB_SIG
 
 	wire	[0:0]	pwm0;
 	wire	[0:0]	pwm1;
-	reg	[0:0]	pwm_fault;
 
-	`TB_CLK(clk_i, CLOCK_PERIOD)
-	`TB_ESRST(rst_i, 1'b1, clk_i, RESET_DURATION)
-	`TB_DUMP("WB_EF_TMR32_tb.vcd", EF_TMR32_WB_tb, 0)
+	`TB_CLK(PCLK, CLOCK_PERIOD)
+	`TB_ESRST(PRESETn, 1'b0, PCLK, RESET_DURATION)
+	`TB_DUMP("APB_CF_TMR32_tb.vcd", CF_TMR32_APB_tb, 0)
 	`TB_FINISH(`MS_TB_SIMTIME)
 
-	EF_TMR32_WB DUV (
-		`TB_WB_SLAVE_CONN,
+	CF_TMR32_APB DUV (
+		`TB_APB_SLAVE_CONN,
 		.pwm0(pwm0),
-		.pwm1(pwm1),
-		.pwm_fault(pwm_fault)
+		.pwm1(pwm1)
 	);
 
-	`include "wb_tasks.vh"
+	`include "apb_tasks.vh"
 
 	`TB_TEST_EVENT(test1)
-    `TB_TEST_EVENT(test2)
+	`TB_TEST_EVENT(test2)
 	`TB_TEST_EVENT(test3)
 	`TB_TEST_EVENT(test4)
 	`TB_TEST_EVENT(test5)
@@ -89,7 +87,7 @@ module EF_TMR32_WB_tb;
 		#1000 -> e_test1_start;
 		@(e_test1_done);
 
-		// Perform Test 2
+		// Perform Test 1
 		#1000 -> e_test2_start;
 		@(e_test2_done);
 
@@ -122,17 +120,17 @@ module EF_TMR32_WB_tb;
 	end
 
 
-// Test 1 - Periodic U/D
+	// Test 1 - Periodic U/D
 	`TB_TEST_BEGIN(test1)
 		// Test 1 code goes here
 		// Reload is 10
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd10);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd10);
 		// Set the prescaler to 4 (divide the clock by 5)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd4);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd4);
 		// Periodic Up/Down 
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b1_11);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b1_11);
 		// Enable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
 		// Wait for some time 
 		#20_000;
 		// Observe the behavior on the waveform viewer: /\/\ 0->10->0
@@ -141,15 +139,15 @@ module EF_TMR32_WB_tb;
 	// Test 2 - Periodic U
 	`TB_TEST_BEGIN(test2)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
 		// Reload is 20
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd20);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd20);
 		// Set the prescaler to 3 (divide the clock by 4)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd4);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd4);
 		// Periodic Up
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b1_10);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b1_10);
 		// Enable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: /|/| 0->20
@@ -158,15 +156,15 @@ module EF_TMR32_WB_tb;
 	// Test 3 - Periodic D
 	`TB_TEST_BEGIN(test3)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
 		// Reload is 15
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
 		// Set the prescaler to 2 (divide the clock by 3)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd3);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd3);
 		// Periodic Down 
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b1_01);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b1_01);
 		// Enable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: |\|\ 15->0
@@ -175,15 +173,15 @@ module EF_TMR32_WB_tb;
 	// Test 4 - One Shot U/D 
 	`TB_TEST_BEGIN(test4)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
 		// Reload is 15
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
 		// Set the prescaler to 2 (divide the clock by 3)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd2);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd2);
 		// One-shot Up/Down 
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b0_11);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b0_11);
 		// Enable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: /\ 0->15->0
@@ -192,15 +190,15 @@ module EF_TMR32_WB_tb;
 	// Test 5 - One Shot U 
 	`TB_TEST_BEGIN(test5)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
 		// Reload is 15
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
 		// Set the prescaler to 2 (divide the clock by 3)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd2);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd2);
 		// One shot Up
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b0_10);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b0_10);
 		// Enable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: /| 0->15
@@ -209,15 +207,15 @@ module EF_TMR32_WB_tb;
 	// Test 6 - One Shot D 
 	`TB_TEST_BEGIN(test6)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
 		// Reload is 15
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd15);
 		// Set the prescaler to 2 (divide the clock by 3)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd2);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd2);
 		// One-shot Down 
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b0_01);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b0_01);
 		// Enable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0001);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: |\ 15->0
@@ -226,23 +224,23 @@ module EF_TMR32_WB_tb;
 	// Test 7 - PWM
 	`TB_TEST_BEGIN(test7)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b0000);
 		// Reload is 10
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd10);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd10);
 		// Set the prescaler to 1 (divide the clock by 2)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd1);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd1);
 		// Periodic Up/Down 
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b1_11);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b1_11);
 		// CMPX is 4
-		WB_W_WRITE(CMPX_REG_OFFSET, 32'd3);
+		APB_W_WRITE(CMPX_REG_OFFSET, 32'd3);
 		// CMPY is 5
-		WB_W_WRITE(CMPY_REG_OFFSET, 32'd7);
+		APB_W_WRITE(CMPY_REG_OFFSET, 32'd7);
 		// Configure PMW0
-		WB_W_WRITE(PWM0CFG_REG_OFFSET, 12'b01_00_10_00_01_10);
+		APB_W_WRITE(PWM0CFG_REG_OFFSET, 12'b01_00_10_00_01_10);
 		// Configure PMW1
-		WB_W_WRITE(PWM1CFG_REG_OFFSET, 12'b10_11_11_11_11_10);
+		APB_W_WRITE(PWM1CFG_REG_OFFSET, 12'b10_11_11_11_11_10);
 		// Enable the timer & both PMW channels
-		WB_W_WRITE(CTRL_REG_OFFSET, 4'b11_0_1);
+		APB_W_WRITE(CTRL_REG_OFFSET, 4'b11_0_1);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: |\ 15->0
@@ -251,27 +249,28 @@ module EF_TMR32_WB_tb;
 	// Test 8 - PWM with inversion and deadtime
 	`TB_TEST_BEGIN(test8)
 		// Disable the timer
-		WB_W_WRITE(CTRL_REG_OFFSET, 5'b00000);
+		APB_W_WRITE(CTRL_REG_OFFSET, 5'b00000);
 		// Reload is 20
-		WB_W_WRITE(RELOAD_REG_OFFSET, 32'd20);
+		APB_W_WRITE(RELOAD_REG_OFFSET, 32'd20);
 		// Set the prescaler to 1 (divide the clock by 2)
-		WB_W_WRITE(PR_REG_OFFSET, 32'd1);
+		APB_W_WRITE(PR_REG_OFFSET, 32'd1);
 		// Periodic Up/Down 
-		WB_W_WRITE(CFG_REG_OFFSET, 3'b1_11);
+		APB_W_WRITE(CFG_REG_OFFSET, 3'b1_11);
 		// CMPX is 4
-		WB_W_WRITE(CMPX_REG_OFFSET, 32'd10);
+		APB_W_WRITE(CMPX_REG_OFFSET, 32'd10);
 		// CMPY is 5
-		WB_W_WRITE(CMPY_REG_OFFSET, 32'd14);
+		APB_W_WRITE(CMPY_REG_OFFSET, 32'd14);
 		// Configure PMW0
-		WB_W_WRITE(PWM0CFG_REG_OFFSET, 12'b01_00_00_00_10_01);
+		APB_W_WRITE(PWM0CFG_REG_OFFSET, 12'b01_00_00_00_10_01);
 		// Configure PMW1
-		WB_W_WRITE(PWM1CFG_REG_OFFSET, 12'b10_11_11_11_11_10);
+		APB_W_WRITE(PWM1CFG_REG_OFFSET, 12'b10_11_11_11_11_10);
 		// Set the deadtime to 2 (1 = 2 - 1)
-		WB_W_WRITE(PWMDT_REG_OFFSET, 1);
+		APB_W_WRITE(PWMDT_REG_OFFSET, 1);
 		// Enable the timer and PWM0; also, enable the deadtime
-		WB_W_WRITE(CTRL_REG_OFFSET, 5'b1_01_0_1);
+		APB_W_WRITE(CTRL_REG_OFFSET, 5'b1_01_0_1);
 		// Wait for some time 
 		#25_000;
 		// Observe the behavior on the waveform viewer: |\ 15->0
 	`TB_TEST_END(test8)
+
 endmodule

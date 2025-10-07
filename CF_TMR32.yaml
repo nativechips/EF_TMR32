@@ -1,5 +1,5 @@
 info:
-  name: EF_TMR32
+  name: CF_TMR32
   description: " 
 A 32-bit timer and PWM generator with the following features:
 
@@ -18,11 +18,11 @@ A 32-bit timer and PWM generator with the following features:
 - Fault handling.
 
   "
-  repo: github.com/efabless/EF_TMR32/tree/main
-  owner: Efabless Corp.
+  repo: github.com/chipfoundry/CF_TMR32/tree/main
+  owner: ChipFoundry, a DBA of Umbralogic Technologies LLC.
   license: APACHE 2.0
-  author: Efabless Corp.
-  email: ip_admin@efabless.com
+  author: ChipFoundry, a DBA of Umbralogic Technologies LLC.
+  email: ip_admin@chipfoundry.com
   version: v1.1.0
   date: 23-01-2025
   category: digital

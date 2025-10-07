@@ -8,7 +8,7 @@ title: Classes
 
 
 
-* **struct [_EF_TMR32_TYPE_](Classes/struct__EF__TMR32__TYPE__.md)** 
+* **struct [_CF_TMR32_TYPE_](Classes/struct__CF__TMR32__TYPE__.md)** 
 
 
 

@@ -1,7 +1,8 @@
 /*
-        Copyright 2024 Efabless Corp.
+	Copyright 2024-2025 ChipFoundry, a DBA of Umbralogic Technologies LLC.
 
-        Author: Mohamed Shalan (mshalan@aucegypt.edu)
+	Original Copyright 2024 Efabless Corp.
+	Author: Efabless Corp. (ip_admin@efabless.com)
 
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@
 
 `include                "tb_macros.vh"
 
-module EF_TMR32_AHBL_tb;
+module CF_TMR32_AHBL_tb;
 
         // Change the following parameters as desired
         parameter real CLOCK_PERIOD = 100.0;
@@ -59,10 +60,10 @@ module EF_TMR32_AHBL_tb;
 
         `TB_CLK(HCLK, CLOCK_PERIOD)
         `TB_ESRST(HRESETn, 1'b0, HCLK, RESET_DURATION)
-        `TB_DUMP("AHBL_EF_TMR32_tb.vcd", EF_TMR32_AHBL_tb, 0)
+        `TB_DUMP("AHBL_CF_TMR32_tb.vcd", CF_TMR32_AHBL_tb, 0)
         `TB_FINISH(`MS_TB_SIMTIME)
 
-        EF_TMR32_AHBL DUV (
+        CF_TMR32_AHBL DUV (
                 `TB_AHBL_SLAVE_CONN,
                 .pwm0(pwm0),
                 .pwm1(pwm1),

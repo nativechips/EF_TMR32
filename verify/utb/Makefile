@@ -1,10 +1,10 @@
-SOURCE = ../../hdl/rtl/EF_TMR32.v
-SOURCE_APB =  ../../hdl/rtl/bus_wrappers/EF_TMR32_APB.v
-SOURCE_AHBL = ../../hdl/rtl/bus_wrappers/EF_TMR32_AHBL.v
-SOURCE_WB = ../../hdl/rtl/bus_wrappers/EF_TMR32_WB.v
-TESTBENCH_APB = EF_TMR32_APB_tb.v
-TESTBENCH_AHBL = EF_TMR32_AHBL_tb.v
-TESTBENCH_WB = EF_TMR32_WB_tb.v
+SOURCE = ../../hdl/rtl/CF_TMR32.v
+SOURCE_APB =  ../../hdl/rtl/bus_wrappers/CF_TMR32_APB.v
+SOURCE_AHBL = ../../hdl/rtl/bus_wrappers/CF_TMR32_AHBL.v
+SOURCE_WB = ../../hdl/rtl/bus_wrappers/CF_TMR32_WB.v
+TESTBENCH_APB = CF_TMR32_APB_tb.v
+TESTBENCH_AHBL = CF_TMR32_AHBL_tb.v
+TESTBENCH_WB = CF_TMR32_WB_tb.v
 RTL_LIB = ../../../IP_Utilities/rtl/aucohl_lib.v
 AUCOHL_RTL_INCLUDES = ../../../IP_Utilities/rtl/
 RTL_INCLUDE_DIR = ../../../BusWrap/includes/rtl/

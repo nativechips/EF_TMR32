@@ -1,6 +1,7 @@
 /*
-	Copyright 2024 Efabless Corp.
+	Copyright 2024-2025 ChipFoundry, a DBA of Umbralogic Technologies LLC.
 
+	Original Copyright 2024 Efabless Corp.
 	Author: Efabless Corp. (ip_admin@efabless.com)
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +27,7 @@
 
 `include			"wb_wrapper.vh"
 
-module EF_TMR32_WB #( 
+module CF_TMR32_WB #( 
 	parameter	
 		PRW = 16
 ) (
@@ -34,6 +35,7 @@ module EF_TMR32_WB #(
 	inout VPWR,
 	inout VGND,
 `endif
+	input	wire	sc_testmode,
 	`WB_SLAVE_PORTS,
 	output	wire	[1-1:0]	pwm0,
 	output	wire	[1-1:0]	pwm1,
@@ -59,8 +61,8 @@ module EF_TMR32_WB #(
     reg [0:0] GCLK_REG;
     wire clk_g;
 
-    wire clk_gated_en = GCLK_REG[0];
-    ef_util_gating_cell clk_gate_cell(
+    wire clk_gated_en = sc_testmode ? 1'b1 : GCLK_REG[0];
+    cf_util_gating_cell clk_gate_cell(
         `ifdef USE_POWER_PINS 
         .vpwr(VPWR),
         .vgnd(VGND),
@@ -178,7 +180,7 @@ module EF_TMR32_WB #(
 
 	assign IRQ = |MIS_REG;
 
-	EF_TMR32 #(
+	CF_TMR32 #(
 		.PRW(PRW)
 	) instance_to_wrap (
 		.clk(clk),

@@ -6,7 +6,7 @@ from uvm.base.uvm_object_globals import UVM_HIGH, UVM_LOW
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.macros.uvm_tlm_defines import uvm_analysis_imp_decl
 from tmr32_coverage.tmr32_cov_groups import tmr32_cov_groups
-from EF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
+from CF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
 
 
 class tmr32_coverage(ip_coverage):

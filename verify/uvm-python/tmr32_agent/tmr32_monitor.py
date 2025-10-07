@@ -16,7 +16,7 @@ from tmr32_item.tmr32_item import tmr32_pwm_item
 from uvm.base.uvm_object_globals import UVM_HIGH, UVM_LOW, UVM_MEDIUM
 import cocotb
 import math
-from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
+from CF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
 
 
 class tmr32_monitor(ip_monitor):

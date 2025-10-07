@@ -1,4 +1,4 @@
-# EF_TMR32
+# CF_TMR32
 
  A 32-bit timer and PWM generator with the following features:
 - 32-bit prescaler.
@@ -18,7 +18,7 @@
 
 Based on your use case, use one of the provided wrappers or create a wrapper for your system bus type. For an example of how to integrate the wishbone wrapper:
 ```verilog
-EF_TMR32_WB INST (
+CF_TMR32_WB INST (
 	.clk_i(clk_i),
 	.rst_i(rst_i),
 	.adr_i(adr_i),
@@ -48,13 +48,13 @@ This IP generates interrupts on specific events, which are described in the [Int
 
 ## Implementation example  
 
-The following table is the result for implementing the EF_TMR32 IP with different wrappers using Sky130 HD library and [OpenLane2](https://github.com/efabless/openlane2) flow.
+The following table is the result for implementing the CF_TMR32 IP with different wrappers using Sky130 HD library and [OpenLane2](https://github.com/chipfoundry/openlane2) flow.
 |Module | Number of cells | Max. freq |
 |---|---|---|
-|EF_TMR32|797| 163 |
-|EF_TMR32_APB|1435|135|
-|EF_TMR32_AHBL|1501|128|
-|EF_TMR32_WB|1669|63|
+|CF_TMR32|797| 163 |
+|CF_TMR32_APB|1435|135|
+|CF_TMR32_AHBL|1501|128|
+|CF_TMR32_WB|1669|63|
 ## The Programmer's Interface
 
 
@@ -199,33 +199,33 @@ The following are the bit definitions for the interrupt registers:
 |1|MX|1|TMR matches CMPX register.|
 |2|MY|1|TMR matches CMPY register.|
 ### Clock Gating
-The IP includes a clock gating feature that allows selective activation and deactivation of the clock using the ``GCLK`` register. This capability is implemented through the ``ef_util_gating_cell`` module, which is part of the common modules library, [ef_util_lib.v](https://github.com/efabless/EF_IP_UTIL/blob/main/hdl/ef_util_lib.v). By default, the clock gating is disabled. To enable behavioral implmentation clock gating, only for simulation purposes, you should define the ``CLKG_GENERIC`` macro. Alternatively, define the ``CLKG_SKY130_HD`` macro if you wish to use the SKY130 HD library clock gating cell, ``sky130_fd_sc_hd__dlclkp_4``.
+The IP includes a clock gating feature that allows selective activation and deactivation of the clock using the ``GCLK`` register. This capability is implemented through the ``cf_util_gating_cell`` module, which is part of the common modules library, [cf_util_lib.v](https://github.com/chipfoundry/CF_IP_UTIL/blob/main/hdl/cf_util_lib.v). By default, the clock gating is disabled. To enable behavioral implmentation clock gating, only for simulation purposes, you should define the ``CLKG_GENERIC`` macro. Alternatively, define the ``CLKG_SKY130_HD`` macro if you wish to use the SKY130 HD library clock gating cell, ``sky130_fd_sc_hd__dlclkp_4``.
 
-**Note:** If you choose the [OpenLane2](https://github.com/efabless/openlane2) flow for implementation and would like to enable the clock gating feature, you need to add ``CLKG_SKY130_HD`` macro to the ``VERILOG_DEFINES`` configuration variable. Update OpenLane2 YAML configuration file as follows: 
+**Note:** If you choose the [OpenLane2](https://github.com/chipfoundry/openlane2) flow for implementation and would like to enable the clock gating feature, you need to add ``CLKG_SKY130_HD`` macro to the ``VERILOG_DEFINES`` configuration variable. Update OpenLane2 YAML configuration file as follows: 
 ```
 VERILOG_DEFINES:
 - CLKG_SKY130_HD
 ```
 ## Firmware Drivers:
-Firmware drivers for EF_TMR32 can be found in the [Drivers](https://github.com/efabless/EFIS/tree/main/Drivers) directory in the [EFIS](https://github.com/efabless/EFIS) (Efabless Firmware Interface Standard) repo. EF_TMR32 driver documentation  is available [here](https://github.com/efabless/EFIS/blob/main/Drivers/Docs/EF_TMR32/README.md).
-You can also find an example C application using the EF_TMR32 drivers [here](https://github.com/efabless/EFIS/tree/main/Drivers/Docs/EF_TMR32/example).
+Firmware drivers for CF_TMR32 can be found in the [Drivers](https://github.com/chipfoundry/EFIS/tree/main/Drivers) directory in the [EFIS](https://github.com/chipfoundry/EFIS) (Efabless Firmware Interface Standard) repo. CF_TMR32 driver documentation  is available [here](https://github.com/chipfoundry/EFIS/blob/main/Drivers/Docs/CF_TMR32/README.md).
+You can also find an example C application using the CF_TMR32 drivers [here](https://github.com/chipfoundry/EFIS/tree/main/Drivers/Docs/CF_TMR32/example).
 ## Installation:
-You can install the IP either by cloning this repository or by using [IPM](https://github.com/efabless/IPM).
-### 1. Using [IPM](https://github.com/efabless/IPM):
-- [Optional] If you do not have IPM installed, follow the installation guide [here](https://github.com/efabless/IPM/blob/main/README.md)
-- After installing IPM, execute the following command ```ipm install EF_TMR32```.
-> **Note:** This method is recommended as it automatically installs [EF_IP_UTIL](https://github.com/efabless/EF_IP_UTIL.git) as a dependency.
+You can install the IP either by cloning this repository or by using [IPM](https://github.com/chipfoundry/IPM).
+### 1. Using [IPM](https://github.com/chipfoundry/IPM):
+- [Optional] If you do not have IPM installed, follow the installation guide [here](https://github.com/chipfoundry/IPM/blob/main/README.md)
+- After installing IPM, execute the following command ```ipm install CF_TMR32```.
+> **Note:** This method is recommended as it automatically installs [CF_IP_UTIL](https://github.com/chipfoundry/CF_IP_UTIL.git) as a dependency.
 ### 2. Cloning this repo: 
-- Clone [EF_IP_UTIL](https://github.com/efabless/EF_IP_UTIL.git) repository, which includes the required modules from the common modules library, [ef_util_lib.v](https://github.com/efabless/EF_IP_UTIL/blob/main/hdl/ef_util_lib.v).
-```git clone https://github.com/efabless/EF_IP_UTIL.git```
+- Clone [CF_IP_UTIL](https://github.com/chipfoundry/CF_IP_UTIL.git) repository, which includes the required modules from the common modules library, [cf_util_lib.v](https://github.com/chipfoundry/CF_IP_UTIL/blob/main/hdl/cf_util_lib.v).
+```git clone https://github.com/chipfoundry/CF_IP_UTIL.git```
 - Clone the IP repository
-```git clone github.com/efabless/EF_TMR32/tree/main```
+```git clone github.com/chipfoundry/CF_TMR32/tree/main```
 
 ### The Wrapped IP Interface 
 
 >**_NOTE:_** This section is intended for advanced users who wish to gain more information about the interface of the wrapped IP, in case they want to create their own wrappers.
 
-<img src="docs/_static/EF_TMR32.svg" width="600"/>
+<img src="docs/_static/CF_TMR32.svg" width="600"/>
 
 #### Module Parameters 
 

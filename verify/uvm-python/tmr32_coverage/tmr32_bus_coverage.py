@@ -5,9 +5,9 @@ from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
 from uvm.base.uvm_object_globals import UVM_HIGH, UVM_LOW
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.macros.uvm_tlm_defines import uvm_analysis_imp_decl
-from EF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
-from EF_UVM.bus_env.bus_coverage.bus_coverage import bus_coverage
-from EF_UVM.bus_env.bus_item import bus_item
+from CF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
+from CF_UVM.bus_env.bus_coverage.bus_coverage import bus_coverage
+from CF_UVM.bus_env.bus_item import bus_item
 from cocotb_coverage.coverage import CoverPoint, CoverCross
 
 

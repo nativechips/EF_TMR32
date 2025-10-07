@@ -5,10 +5,10 @@ from uvm.base.uvm_object_globals import UVM_HIGH, UVM_LOW, UVM_MEDIUM
 from uvm.macros import uvm_component_utils, uvm_fatal, uvm_info
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.tlm1.uvm_analysis_port import UVMAnalysisExport
-from EF_UVM.ref_model.ref_model import ref_model
-from EF_UVM.bus_env.bus_item import bus_item
+from CF_UVM.rcf_model.rcf_model import rcf_model
+from CF_UVM.bus_env.bus_item import bus_item
 from tmr32_item.tmr32_item import tmr32_pwm_item
-from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
+from CF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
 from cocotb.triggers import (
     Timer,
     ClockCycles,
@@ -21,7 +21,7 @@ from cocotb.triggers import (
 import cocotb
 
 
-class tmr32_VIP(ref_model):
+class tmr32_VIP(rcf_model):
     def __init__(self, name="tmr32_VIP", parent=None):
         super().__init__(name, parent)
         self._timer_first_flag = False
@@ -67,13 +67,13 @@ class tmr32_VIP(ref_model):
                     self.event_calibrate_tmr.set()
                 else:
                     # check if diffrence is 1 ignore it
-                    ref_tmr = self.regs.read_reg_value(tr.addr)
-                    if (abs(ref_tmr - tr.data) < 2) or (
-                        abs(ref_tmr - tr.data) == self.regs.read_reg_value("RELOAD")
+                    rcf_tmr = self.regs.read_reg_value(tr.addr)
+                    if (abs(rcf_tmr - tr.data) < 2) or (
+                        abs(rcf_tmr - tr.data) == self.regs.read_reg_value("RELOAD")
                     ):  # ignore this shift and pass the correct value
                         data = tr.data
                     else:  # pass the incorrect value
-                        data = ref_tmr
+                        data = rcf_tmr
                     td = tr.do_clone()
                     td.data = data
                     self.bus_bus_export.write(td)

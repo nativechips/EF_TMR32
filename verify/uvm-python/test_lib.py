@@ -7,9 +7,9 @@ from uvm.base.uvm_printer import UVMTablePrinter
 from uvm.base.sv import sv
 from uvm.base.uvm_object_globals import UVM_FULL, UVM_LOW, UVM_ERROR
 from uvm.base.uvm_globals import run_test
-from EF_UVM.top_env import top_env
+from CF_UVM.top_env import top_env
 from tmr32_interface.tmr32_if import tmr32_if
-from EF_UVM.bus_env.bus_interface.bus_if import (
+from CF_UVM.bus_env.bus_interface.bus_if import (
     bus_ahb_if,
     bus_apb_if,
     bus_wb_if,
@@ -17,12 +17,12 @@ from EF_UVM.bus_env.bus_interface.bus_if import (
 )
 from cocotb_coverage.coverage import coverage_db
 from cocotb.triggers import Event, First
-from EF_UVM.bus_env.bus_regs import bus_regs
+from CF_UVM.bus_env.bus_regs import bus_regs
 from uvm.base.uvm_report_server import UVMReportServer
 from uvm.base import UVMRoot
 
 # seq
-from EF_UVM.bus_env.bus_seq_lib.write_read_regs import write_read_regs
+from CF_UVM.bus_env.bus_seq_lib.write_read_regs import write_read_regs
 from tmr32_seq_lib.pwm_actions_seq import pwm_actions_seq
 from tmr32_seq_lib.pwm_pr_seq import pwm_pr_seq
 from tmr32_seq_lib.pwm_tmr_seq import pwm_tmr_seq
@@ -30,29 +30,29 @@ from tmr32_seq_lib.timer_vary import timer_vary
 from tmr32_seq_lib.temp import temp
 
 # override classes
-from EF_UVM.ip_env.ip_agent.ip_driver import ip_driver
+from CF_UVM.ip_env.ip_agent.ip_driver import ip_driver
 from tmr32_agent.tmr32_driver import tmr32_driver
-from EF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
+from CF_UVM.ip_env.ip_agent.ip_monitor import ip_monitor
 from tmr32_agent.tmr32_monitor import tmr32_monitor
-from EF_UVM.ref_model.ref_model import ref_model
-from ref_model.ref_model import tmr32_VIP
-from EF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
+from CF_UVM.rcf_model.rcf_model import rcf_model
+from rcf_model.rcf_model import tmr32_VIP
+from CF_UVM.ip_env.ip_coverage.ip_coverage import ip_coverage
 from tmr32_coverage.tmr32_coverage import tmr32_coverage
-from EF_UVM.ip_env.ip_logger.ip_logger import ip_logger
+from CF_UVM.ip_env.ip_logger.ip_logger import ip_logger
 from tmr32_logger.tmr32_logger import tmr32_logger
-from EF_UVM.scoreboard import scoreboard
+from CF_UVM.scoreboard import scoreboard
 from tmr32_coverage.tmr32_bus_coverage import tmr32_bus_coverage
-from EF_UVM.bus_env.bus_coverage.bus_coverage import bus_coverage
+from CF_UVM.bus_env.bus_coverage.bus_coverage import bus_coverage
 
 #
-from EF_UVM.bus_env.bus_agent.bus_ahb_driver import bus_ahb_driver
-from EF_UVM.bus_env.bus_agent.bus_apb_driver import bus_apb_driver
-from EF_UVM.bus_env.bus_agent.bus_wb_driver import bus_wb_driver
-from EF_UVM.bus_env.bus_agent.bus_ahb_monitor import bus_ahb_monitor
-from EF_UVM.bus_env.bus_agent.bus_apb_monitor import bus_apb_monitor
-from EF_UVM.bus_env.bus_agent.bus_wb_monitor import bus_wb_monitor
+from CF_UVM.bus_env.bus_agent.bus_ahb_driver import bus_ahb_driver
+from CF_UVM.bus_env.bus_agent.bus_apb_driver import bus_apb_driver
+from CF_UVM.bus_env.bus_agent.bus_wb_driver import bus_wb_driver
+from CF_UVM.bus_env.bus_agent.bus_ahb_monitor import bus_ahb_monitor
+from CF_UVM.bus_env.bus_agent.bus_apb_monitor import bus_apb_monitor
+from CF_UVM.bus_env.bus_agent.bus_wb_monitor import bus_wb_monitor
 
-from EF_UVM.base_test import base_test
+from CF_UVM.base_test import base_test
 
 
 @cocotb.test()
@@ -103,7 +103,7 @@ class tmr_base_test(base_test):
         # override
         self.set_type_override_by_type(ip_driver.get_type(), tmr32_driver.get_type())
         self.set_type_override_by_type(ip_monitor.get_type(), tmr32_monitor.get_type())
-        self.set_type_override_by_type(ref_model.get_type(), tmr32_VIP.get_type())
+        self.set_type_override_by_type(rcf_model.get_type(), tmr32_VIP.get_type())
         self.set_type_override_by_type(
             ip_coverage.get_type(), tmr32_coverage.get_type()
         )

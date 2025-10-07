@@ -1,6 +1,7 @@
 /*
-	Copyright 2024 Efabless Corp.
+	Copyright 2024-2025 ChipFoundry, a DBA of Umbralogic Technologies LLC.
 
+	Original Copyright 2024 Efabless Corp.
 	Author: Efabless Corp. (ip_admin@efabless.com)
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +20,7 @@
 `timescale          1ns/1ps
 `default_nettype    none                                                   
 
-module EF_TMR32 #(parameter PRW = 16,
+module CF_TMR32 #(parameter PRW = 16,
                                 PWM_FAULT_CLR_C0 = 16'hA539,
                                 PWM_FAULT_CLR_C1 = 16'hA953 
 )
@@ -67,7 +68,7 @@ module EF_TMR32 #(parameter PRW = 16,
 
     reg             fault_reg;
 
-    ef_util_ped TMREN_PE (
+    cf_util_ped TMREN_PE (
         .clk(clk),
         .in(tmr_en),
         .out(tmr_clr)

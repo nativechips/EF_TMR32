@@ -3,7 +3,7 @@ from uvm.comps.uvm_driver import UVMDriver
 from uvm.base.uvm_config_db import UVMConfigDb
 from uvm.base.uvm_object_globals import UVM_HIGH, UVM_LOW, UVM_MEDIUM
 from cocotb.triggers import Timer, ClockCycles, FallingEdge, Event, RisingEdge
-from EF_UVM.ip_env.ip_agent.ip_driver import ip_driver
+from CF_UVM.ip_env.ip_agent.ip_driver import ip_driver
 
 
 class tmr32_driver(ip_driver):

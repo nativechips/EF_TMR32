@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxyfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="doxyfile.xsd" version="1.10.0" xml:lang="en-US">
   <option  id='DOXYFILE_ENCODING' default='yes' type='string'><value><![CDATA[UTF-8]]></value></option>
-  <option  id='PROJECT_NAME' default='no' type='string'><value><![CDATA["EF_TMR32 APIs"]]></value></option>
+  <option  id='PROJECT_NAME' default='no' type='string'><value><![CDATA["CF_TMR32 APIs"]]></value></option>
   <option  id='PROJECT_NUMBER' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='PROJECT_BRIEF' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='PROJECT_LOGO' default='yes' type='string'><value><![CDATA[]]></value></option>
@@ -11,7 +11,7 @@
   <option  id='CREATE_SUBDIRS_LEVEL' default='yes' type='int'><value>8</value></option>
   <option  id='ALLOW_UNICODE_NAMES' default='yes' type='bool'><value>NO</value></option>
   <option  id='OUTPUT_LANGUAGE' default='yes' type='string'><value>English</value></option>
-  <option  id='BRIEF_MEMBER_DESC' default='yes' type='bool'><value>YES</value></option>
+  <option  id='BRICF_MEMBER_DESC' default='yes' type='bool'><value>YES</value></option>
   <option  id='REPEAT_BRIEF' default='yes' type='bool'><value>YES</value></option>
   <option  id='ABBREVIATE_BRIEF' default='yes' type='stringlist'>
     <value><![CDATA["The $name class"]]></value>
@@ -65,7 +65,7 @@
   <option  id='SUBGROUPING' default='yes' type='bool'><value>YES</value></option>
   <option  id='INLINE_GROUPED_CLASSES' default='yes' type='bool'><value>NO</value></option>
   <option  id='INLINE_SIMPLE_STRUCTS' default='yes' type='bool'><value>NO</value></option>
-  <option  id='TYPEDEF_HIDES_STRUCT' default='yes' type='bool'><value>NO</value></option>
+  <option  id='TYPEDCF_HIDES_STRUCT' default='yes' type='bool'><value>NO</value></option>
   <option  id='LOOKUP_CACHE_SIZE' default='yes' type='int'><value>0</value></option>
   <option  id='NUM_PROC_THREADS' default='yes' type='int'><value>1</value></option>
   <option  id='TIMESTAMP' default='yes' type='string'><value>NO</value></option>
@@ -92,7 +92,7 @@
   <option  id='FORCE_LOCAL_INCLUDES' default='yes' type='bool'><value>NO</value></option>
   <option  id='INLINE_INFO' default='yes' type='bool'><value>YES</value></option>
   <option  id='SORT_MEMBER_DOCS' default='yes' type='bool'><value>YES</value></option>
-  <option  id='SORT_BRIEF_DOCS' default='yes' type='bool'><value>NO</value></option>
+  <option  id='SORT_BRICF_DOCS' default='yes' type='bool'><value>NO</value></option>
   <option  id='SORT_MEMBERS_CTORS_1ST' default='yes' type='bool'><value>NO</value></option>
   <option  id='SORT_GROUP_NAMES' default='yes' type='bool'><value>NO</value></option>
   <option  id='SORT_BY_SCOPE_NAME' default='yes' type='bool'><value>NO</value></option>
